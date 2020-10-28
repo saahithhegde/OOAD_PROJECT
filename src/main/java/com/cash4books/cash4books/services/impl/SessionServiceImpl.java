@@ -17,12 +17,12 @@ public class SessionServiceImpl implements SessionService {
 
     Logger logger = LoggerFactory.getLogger(SessionServiceImpl.class);
 
-
         @Override
         public boolean getSessionValidation(HttpServletRequest request,String token,String userEmail) {
             List<String> sessionDetails = (List<String>) request.getSession().getAttribute("USER_SESSION_ATTRIBUTES");
             if (sessionDetails!=null) {
                 if(sessionDetails.contains(token) && sessionDetails.contains(userEmail)){
+                    logger.info("valid session");
                     return true;
                 }
             }
@@ -38,6 +38,7 @@ public class SessionServiceImpl implements SessionService {
                 String token= UUID.randomUUID().toString();
                 attributes.add(token);
                 attributes.add(usersLoginDto.getEmail());
+                logger.info("set session attributes");
                 request.getSession().setAttribute("USER_SESSION_ATTRIBUTES", attributes);
             }
             return attributes;
@@ -45,6 +46,7 @@ public class SessionServiceImpl implements SessionService {
 
         @Override
         public void destroySession(HttpServletRequest request) {
+            logger.info("destroyed session attributes");
             request.getSession().invalidate();
         }
 }

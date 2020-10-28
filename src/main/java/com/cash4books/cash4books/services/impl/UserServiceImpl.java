@@ -3,6 +3,8 @@ package com.cash4books.cash4books.services.impl;
 import com.cash4books.cash4books.dto.users.ForgotPasswordDto;
 import com.cash4books.cash4books.dto.users.UsersLoginDto;
 import com.cash4books.cash4books.entity.Users;
+import com.cash4books.cash4books.exception.UserNotFoundException;
+import com.cash4books.cash4books.exception.UserNotLoggedInException;
 import com.cash4books.cash4books.services.UserService;
 import com.cash4books.cash4books.repository.UserRepository;
 import org.slf4j.Logger;
@@ -34,10 +36,14 @@ public class UserServiceImpl implements UserService {
                     return newUserDetails;
                 }
                 else{
+                    logger.error("required field not present");
                     throw new Exception("Basic details not present");
                 }
             }
-            throw new Exception("User already present");
+            else {
+                logger.error("user already present");
+                throw new Exception("User already present");
+            }
     }
 
     @Override
@@ -47,13 +53,16 @@ public class UserServiceImpl implements UserService {
             if (existingUserDetails != null) {
                 existingUserDetails = newUserDetails;
                 userRepository.save(existingUserDetails);
+                logger.info("updated user");
                 return existingUserDetails;
             } else {
-                throw new Exception("User already present");
+                logger.error("user not found");
+                throw new UserNotFoundException();
             }
         }
         else{
-            throw new Exception("User Not Logged In");
+            logger.error("user not logged in");
+            throw new UserNotLoggedInException();
         }
     }
 
@@ -62,14 +71,17 @@ public class UserServiceImpl implements UserService {
             if(sessionService.getSessionValidation(request,token,userEmail)) {
                 Users getUserProfile = userRepository.findUserByEmail(userEmail);
                 if (getUserProfile != null) {
+                    logger.info("retrieved user successfully");
                     return getUserProfile;
                 }
                 else {
-                    throw new Exception("User Details Not Found");
+                    logger.error("user not found");
+                    throw new UserNotFoundException();
                 }
             }
             else{
-                throw new Exception("User Not Logged In");
+                logger.error("user not logged in");
+                throw new UserNotLoggedInException();
             }
     }
 
@@ -78,13 +90,15 @@ public class UserServiceImpl implements UserService {
             Users userDetails = userRepository.findUserByEmail(usersLoginDto.getEmail());
             if (userDetails != null) {
                 if (userDetails.getPassword().equals(usersLoginDto.getPassword())) {
-                    logger.info("created new session");
+                    logger.info("created new session and authenticated user");
                     return sessionService.createSession(usersLoginDto, request);
                 } else {
+                    logger.error("password wrong");
                     throw new Exception("Password Error");
                 }
             } else {
-                throw new Exception("User Not Found");
+                logger.error("user not found");
+                throw new UserNotFoundException();
             }
     }
 
@@ -101,6 +115,7 @@ public class UserServiceImpl implements UserService {
             if(userDetails.getQuestion().equals(forgotPasswordDto.getQuestion()) && userDetails.getAnswer().equals(forgotPasswordDto.getAnswer())){
                 userDetails.setPassword(forgotPasswordDto.getPassword());
                 userRepository.save(userDetails);
+                logger.info("new password set");
                 return userDetails;
             }
             else{
@@ -108,7 +123,8 @@ public class UserServiceImpl implements UserService {
             }
         }
         else {
-            throw new Exception("User not found");
+            logger.error("user not found");
+            throw new UserNotFoundException();
         }
     }
 
