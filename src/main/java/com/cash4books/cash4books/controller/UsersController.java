@@ -63,7 +63,7 @@ public class UsersController {
     }
 
 
-    @PostMapping(value = {"/logout"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = {"/logout"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateProfile(HttpServletRequest request) {
         userService.logoutUser(request);
         return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
