@@ -47,9 +47,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Users updateUserProfile(Users newUserDetails, HttpServletRequest request, String token, String userEmail) throws Exception {
-        if(sessionService.getSessionValidation(request,token,userEmail)) {
-            Users existingUserDetails = userRepository.findUserByEmail(userEmail);
+    public Users updateUserProfile(Users newUserDetails, HttpServletRequest request, String token) throws Exception {
+        String email=sessionService.getSessionValidation(request,token);
+        if(email!=null) {
+            Users existingUserDetails = userRepository.findUserByEmail(email);
             if (existingUserDetails != null) {
                 existingUserDetails = newUserDetails;
                 userRepository.save(existingUserDetails);
@@ -67,9 +68,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Users getUserProfile (HttpServletRequest request,String token, String userEmail) throws Exception{
-            if(sessionService.getSessionValidation(request,token,userEmail)) {
-                Users getUserProfile = userRepository.findUserByEmail(userEmail);
+    public Users getUserProfile (HttpServletRequest request,String token) throws Exception{
+            String email=sessionService.getSessionValidation(request,token);
+            if(email!=null) {
+                Users getUserProfile = userRepository.findUserByEmail(email);
                 if (getUserProfile != null) {
                     logger.info("retrieved user successfully");
                     return getUserProfile;
@@ -86,7 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<String> authenticateUser(UsersLoginDto usersLoginDto, HttpServletRequest request) throws Exception{
+    public String authenticateUser(UsersLoginDto usersLoginDto, HttpServletRequest request) throws Exception{
             Users userDetails = userRepository.findUserByEmail(usersLoginDto.getEmail());
             if (userDetails != null) {
                 if (userDetails.getPassword().equals(usersLoginDto.getPassword())) {
