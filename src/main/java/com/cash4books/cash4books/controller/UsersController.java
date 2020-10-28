@@ -33,9 +33,9 @@ public class UsersController {
     }
 
     @PostMapping(value = {"/login"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<String>> login(@RequestBody UsersLoginDto usersLoginDto, HttpServletRequest request) {
+    public ResponseEntity<String> login(@RequestBody UsersLoginDto usersLoginDto, HttpServletRequest request) {
         try {
-            List<String> userSessionInfo = userService.authenticateUser(usersLoginDto, request);
+            String userSessionInfo = userService.authenticateUser(usersLoginDto, request);
             return new ResponseEntity(userSessionInfo, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
@@ -43,9 +43,9 @@ public class UsersController {
     }
 
     @GetMapping(value = {"/getProfile"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Users> getProfile(HttpServletRequest request, @RequestHeader(name = "Token") String token, @RequestHeader(name = "email") String userEmail) {
+    public ResponseEntity<Users> getProfile(HttpServletRequest request, @RequestHeader(name = "Token") String token) {
         try {
-            Users getUserProfile = userService.getUserProfile(request, token, userEmail);
+            Users getUserProfile = userService.getUserProfile(request, token);
             return new ResponseEntity(getUserProfile, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
@@ -53,9 +53,9 @@ public class UsersController {
     }
 
     @PostMapping(value = {"/updateProfile"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Users> updateProfile(@RequestBody Users newUserDetails, HttpServletRequest request, @RequestHeader(name = "Token") String token, @RequestHeader(name = "email") String userEmail) {
+    public ResponseEntity<Users> updateProfile(@RequestBody Users newUserDetails, HttpServletRequest request, @RequestHeader(name = "Token") String token) {
         try {
-            Users updatedDetails = userService.updateUserProfile(newUserDetails, request, token, userEmail);
+            Users updatedDetails = userService.updateUserProfile(newUserDetails, request, token);
             return new ResponseEntity(updatedDetails, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
