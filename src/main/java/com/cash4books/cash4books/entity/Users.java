@@ -6,9 +6,6 @@ import javax.persistence.*;
 public class Users {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private int id;
-
     private String email;
 
     private String password;
@@ -25,14 +22,6 @@ public class Users {
 
     @GeneratedValue(strategy= GenerationType.AUTO)
     private String cartId;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getEmail() {
         return email;

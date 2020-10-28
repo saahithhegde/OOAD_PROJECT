@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -19,25 +21,47 @@ public class UsersController {
     UserServiceImpl userService;
 
     @PostMapping(value = {"/createUser"},produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String createUser(@RequestBody Users newUserDetails){
-        return userService.createUser(newUserDetails);
+    public ResponseEntity<Users> createUser(@RequestBody Users newUserDetails){
+        try{
+            Users userdetails=userService.createUser(newUserDetails);
+            return new ResponseEntity(userdetails,HttpStatus.ACCEPTED);
+        }
+        catch(Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @PostMapping(value = {"/login"},produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String userLogin(@RequestBody UsersLoginDto usersLoginDto, HttpServletRequest request){
-        return userService.authenticateUser(usersLoginDto,request);
+    public ResponseEntity<List<String>> login(@RequestBody UsersLoginDto usersLoginDto, HttpServletRequest request){
+        try {
+            List<String> userSessionInfo = userService.authenticateUser(usersLoginDto, request);
+            return new ResponseEntity(userSessionInfo,HttpStatus.ACCEPTED);
+        }
+        catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(value = {"/getProfile"}, produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Users getProfile(@RequestBody Users userDetails){
-        Users getUserProfile= userService.getUserProfile(userDetails);
-        return getUserProfile;
+    public ResponseEntity<Users> getProfile(HttpServletRequest request,@RequestHeader (name="Token") String token,@RequestHeader (name="email") String userEmail){
+        try {
+            Users getUserProfile = userService.getUserProfile(request,token,userEmail);
+            return new ResponseEntity(getUserProfile,HttpStatus.ACCEPTED);
+        }
+        catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping(value = {"/updateProfile"}, produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Users updateProfile(@RequestBody Users newUserDetails){
-        Users updateUserProfile= userService.updateUserProfile(newUserDetails);
-        return updateUserProfile;
+    public ResponseEntity<Users> updateProfile(@RequestBody Users newUserDetails, HttpServletRequest request, @RequestHeader (name="Token") String token, @RequestHeader (name="email") String userEmail){
+        try {
+            Users updatedDetails= userService.updateUserProfile(newUserDetails,request,token,userEmail);
+            return new ResponseEntity(updatedDetails,HttpStatus.ACCEPTED);
+        }catch (Exception e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
 
@@ -47,10 +71,6 @@ public class UsersController {
        return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
     }
 
-    @GetMapping(value = {"/"}, produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String homepage(){
-        return "Welcome!!";
-    }
 
 
 }
