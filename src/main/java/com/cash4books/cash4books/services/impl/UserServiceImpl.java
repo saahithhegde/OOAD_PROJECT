@@ -1,17 +1,23 @@
 package com.cash4books.cash4books.services.impl;
 
+import com.cash4books.cash4books.dto.users.ForgotPasswordDto;
 import com.cash4books.cash4books.dto.users.UsersLoginDto;
 import com.cash4books.cash4books.entity.Users;
 import com.cash4books.cash4books.services.UserService;
 import com.cash4books.cash4books.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private  SessionServiceImpl sessionService;
@@ -20,72 +26,90 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public String createUser(Users newUserDetails){
-        try{
+    public Users createUser(Users newUserDetails) throws Exception{
             if(userRepository.findUserByEmail(newUserDetails.getEmail())==null){
-                userRepository.save(newUserDetails);
-                return "Created New User";
+                if(newUserDetails.getEmail()!=null && newUserDetails.getPassword()!=null && newUserDetails.getQuestion()!=null && newUserDetails.getAnswer()!=null ) {
+                    userRepository.save(newUserDetails);
+                    logger.info("saved new user");
+                    return newUserDetails;
+                }
+                else{
+                    throw new Exception("Basic details not present");
+                }
             }
-            return "User Already Exists";
-        }
-        catch (Exception e){
-            return "Failed To Create User";
-        }
+            throw new Exception("User already present");
     }
 
     @Override
-    public Users updateUserProfile(Users newUserDetails) {
-        try {
-            Users existingUserDetails = userRepository.findUserByEmail(newUserDetails.getEmail());
+    public Users updateUserProfile(Users newUserDetails, HttpServletRequest request, String token, String userEmail) throws Exception {
+        if(sessionService.getSessionValidation(request,token,userEmail)) {
+            Users existingUserDetails = userRepository.findUserByEmail(userEmail);
             if (existingUserDetails != null) {
                 existingUserDetails = newUserDetails;
                 userRepository.save(existingUserDetails);
                 return existingUserDetails;
+            } else {
+                throw new Exception("User already present");
             }
-            return null;
-        } catch (Exception e) {
-            return null;
+        }
+        else{
+            throw new Exception("User Not Logged In");
         }
     }
 
     @Override
-    public Users getUserProfile (Users userDetails) {
-        try {
-            Users getUserProfile = userRepository.findUserByEmail(userDetails.getEmail());
-            if (getUserProfile != null) {
-                return getUserProfile;
-            }
-            return null;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    @Override
-    public String authenticateUser(UsersLoginDto usersLoginDto, HttpServletRequest request){
-        try{
-            Users userDetails=userRepository.findUserByEmail(usersLoginDto.getEmail());
-            if(userDetails!=null){
-                if(userDetails.getPassword().equals(usersLoginDto.getPassword())){
-                    sessionService.createSession(usersLoginDto,request);
-                    return usersLoginDto.getEmail();
+    public Users getUserProfile (HttpServletRequest request,String token, String userEmail) throws Exception{
+            if(sessionService.getSessionValidation(request,token,userEmail)) {
+                Users getUserProfile = userRepository.findUserByEmail(userEmail);
+                if (getUserProfile != null) {
+                    return getUserProfile;
                 }
-                else
-                {
-                    return null;
+                else {
+                    throw new Exception("User Details Not Found");
                 }
             }
             else{
-                return null;
+                throw new Exception("User Not Logged In");
             }
-        }
-        catch (Exception e){
-            return null;
-        }
     }
 
+    @Override
+    public List<String> authenticateUser(UsersLoginDto usersLoginDto, HttpServletRequest request) throws Exception{
+            Users userDetails = userRepository.findUserByEmail(usersLoginDto.getEmail());
+            if (userDetails != null) {
+                if (userDetails.getPassword().equals(usersLoginDto.getPassword())) {
+                    logger.info("created new session");
+                    return sessionService.createSession(usersLoginDto, request);
+                } else {
+                    throw new Exception("Password Error");
+                }
+            } else {
+                throw new Exception("User Not Found");
+            }
+    }
+
+    @Override
     public void logoutUser(HttpServletRequest request){
+        logger.info("logged out");
         sessionService.destroySession(request);
+    }
+
+    @Override
+    public Users forgotPassword(ForgotPasswordDto forgotPasswordDto)throws Exception{
+        Users userDetails=userRepository.findUserByEmail(forgotPasswordDto.getEmail());
+        if(userDetails!=null){
+            if(userDetails.getQuestion().equals(forgotPasswordDto.getQuestion()) && userDetails.getAnswer().equals(forgotPasswordDto.getAnswer())){
+                userDetails.setPassword(forgotPasswordDto.getPassword());
+                userRepository.save(userDetails);
+                return userDetails;
+            }
+            else{
+                throw new Exception("User Question and answers do not match");
+            }
+        }
+        else {
+            throw new Exception("User not found");
+        }
     }
 
 }
