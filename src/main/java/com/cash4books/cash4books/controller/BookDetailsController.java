@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -24,9 +23,9 @@ public class BookDetailsController {
 
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Book> addBook(@RequestBody Book book , HttpServletRequest request){
+    public ResponseEntity<Book> addBook(@RequestBody Book book , @RequestHeader(name = "email") String userEmail){
         try {
-            book = bookServiceImpl.addBook(book,request);
+            book = bookServiceImpl.addBook(book,userEmail);
         } catch (Exception e) {
             logger.error("Failed to add book, user is not logged in");
             return new ResponseEntity("User not logged in", HttpStatus.BAD_REQUEST);

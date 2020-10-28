@@ -18,8 +18,7 @@ private BookRepository bookRepository;
 @Autowired
 private UserRepository userRepository;
 
-    public Book addBook(Book book, HttpServletRequest request) throws Exception {
-        String email = (String) request.getSession().getAttribute("USER_SESSION_ATTRIBUTES");
+    public Book addBook(Book book, String email) throws Exception {
         //TODO custom exception
         if(email==null ||  email.equals(""))
             throw new Exception("User not logged in");
