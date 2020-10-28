@@ -5,9 +5,6 @@ import javax.persistence.*;
 @Table(name = "users")
 public class Users {
 
-
-   // private int id;
-
     @Id
     private String email;
 
@@ -25,14 +22,6 @@ public class Users {
 
     @GeneratedValue(strategy= GenerationType.AUTO)
     private String cartId;
-
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
 
     public String getEmail() {
         return email;
