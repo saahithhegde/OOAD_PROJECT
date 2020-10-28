@@ -13,11 +13,12 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
+
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import javax.servlet.http.HttpServletRequest;
+
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -32,10 +33,16 @@ public class BookControllerTest {
 
     @Test
     public void addBookTest() throws Exception {
-        doNothing().when(bookService).addBook(Mockito.any(Book.class),Mockito.any(HttpServletRequest.class));
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/addBook")
+        Book book = new Book();
+        book.setTitle("book_5");
+        book.setAuthor("abc");
+        book.setCategory("SE");
+        book.setPrice(2.5);
+        when(bookService.addBook(Mockito.any(Book.class),Mockito.anyString())).thenReturn(book);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/book/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"title\":\"book_5\", \"author\" : \"abc\",\"price\" : 2.5,\"category\" : \"SE\"}")
+                .header("email","test")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.title").exists())
@@ -50,10 +57,11 @@ public class BookControllerTest {
     }
     @Test
     public void addBookExceptionTest() throws Exception {
-        doThrow(new Exception("Exception while adding book")).when(bookService).addBook(Mockito.any(Book.class),Mockito.any(HttpServletRequest.class));
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/addBook")
+        doThrow(new Exception("Exception while adding book")).when(bookService).addBook(Mockito.any(Book.class),Mockito.anyString());
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/book/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"title\":\"book_5\", \"author\" : \"abc\",\"price\" : 2.5,\"category\" : \"SE\"}")
+                .header("email","test")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
