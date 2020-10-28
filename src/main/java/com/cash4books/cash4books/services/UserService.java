@@ -1,5 +1,6 @@
 package com.cash4books.cash4books.services;
 
+import com.cash4books.cash4books.dto.users.ForgotPasswordDto;
 import com.cash4books.cash4books.dto.users.UsersLoginDto;
 import com.cash4books.cash4books.entity.Users;
 
@@ -12,6 +13,10 @@ public interface UserService {
     Users getUserProfile(HttpServletRequest request, String token, String userEmail) throws Exception;
     List<String> authenticateUser(UsersLoginDto usersLoginDto, HttpServletRequest request) throws Exception;
     Users createUser(Users newUserDetails) throws Exception;
+    Users forgotPassword(ForgotPasswordDto forgotPasswordDto)throws Exception;
+    void logoutUser(HttpServletRequest request);
+
+
 
 }
 

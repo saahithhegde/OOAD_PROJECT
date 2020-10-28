@@ -1,5 +1,6 @@
 package com.cash4books.cash4books.services.impl;
 
+import com.cash4books.cash4books.dto.users.ForgotPasswordDto;
 import com.cash4books.cash4books.dto.users.UsersLoginDto;
 import com.cash4books.cash4books.entity.Users;
 import com.cash4books.cash4books.services.UserService;
@@ -87,9 +88,28 @@ public class UserServiceImpl implements UserService {
             }
     }
 
+    @Override
     public void logoutUser(HttpServletRequest request){
         logger.info("logged out");
         sessionService.destroySession(request);
+    }
+
+    @Override
+    public Users forgotPassword(ForgotPasswordDto forgotPasswordDto)throws Exception{
+        Users userDetails=userRepository.findUserByEmail(forgotPasswordDto.getEmail());
+        if(userDetails!=null){
+            if(userDetails.getQuestion().equals(forgotPasswordDto.getQuestion()) && userDetails.getAnswer().equals(forgotPasswordDto.getAnswer())){
+                userDetails.setPassword(forgotPasswordDto.getPassword());
+                userRepository.save(userDetails);
+                return userDetails;
+            }
+            else{
+                throw new Exception("User Question and answers do not match");
+            }
+        }
+        else {
+            throw new Exception("User not found");
+        }
     }
 
 }
