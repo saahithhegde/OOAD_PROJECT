@@ -1,5 +1,9 @@
 package com.cash4books.cash4books.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,20 +12,33 @@ public class Book {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     Integer bookID;
 
-    String userId;
+   // String userId;
     String title;
     String author;
     double price;
     String category;
 
-
-    public String getUserId() {
-        return userId;
+    public Users getUsers() {
+        return users;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUsers(Users users) {
+        this.users = users;
     }
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Users users;
+
+//    public String getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(String userId) {
+//        this.userId = userId;
+//    }
 
     public String getTitle() {
         return title;
