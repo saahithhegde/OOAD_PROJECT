@@ -1,3 +1,21 @@
-<p>
-  login works!
-</p>
+<div class="container">
+  <h2>LOGIN:</h2>
+  <form>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email address</label>
+      <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email" [(ngModel)]="email">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input type="password" class="form-control"  placeholder="Password" [ngModel]="password">
+    </div>
+    <button type="submit" class="btn btn-success" (click)="authenticate()">Submit</button>
+    <button class="btn btn-primary pull-right" (click)="redirectRegister()">Register</button>
+  </form>
+  <br>
+  <div>
+    <div class="alert alert-danger" role="alert">
+      Wrong user credentials
+    </div>
+  </div>
+</div>

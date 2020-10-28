@@ -2,6 +2,7 @@ package com.cash4books.cash4books.controller;
 
 import com.cash4books.cash4books.entity.Book;
 import com.cash4books.cash4books.services.impl.BookServiceImpl;
+import com.cash4books.cash4books.services.impl.SessionServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -13,6 +14,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -31,6 +34,9 @@ public class BookControllerTest {
     @MockBean
     private BookServiceImpl bookService;
 
+    @MockBean
+    SessionServiceImpl sessionService;
+
     @Test
     public void addBookTest() throws Exception {
         Book book = new Book();
@@ -38,11 +44,13 @@ public class BookControllerTest {
         book.setAuthor("abc");
         book.setCategory("SE");
         book.setPrice(2.5);
-        when(bookService.addBook(Mockito.any(Book.class),Mockito.anyString())).thenReturn(book);
+        when(sessionService.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString(),Mockito.anyString())).thenReturn(true);
+        when(bookService.addBook(Mockito.any(Book.class),Mockito.any(HttpServletRequest.class),Mockito.anyString(),Mockito.anyString())).thenReturn(book);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/book/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"title\":\"book_5\", \"author\" : \"abc\",\"price\" : 2.5,\"category\" : \"SE\"}")
                 .header("email","test")
+                .header("Token","dummy")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.title").exists())
@@ -55,13 +63,14 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.category").value("SE"))
                 .andDo(print());
     }
-    @Test
+    @Test(expected = Exception.class)
     public void addBookExceptionTest() throws Exception {
-        doThrow(new Exception("Exception while adding book")).when(bookService).addBook(Mockito.any(Book.class),Mockito.anyString());
+        when(sessionService.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString(),Mockito.anyString())).thenReturn(false);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/book/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"title\":\"book_5\", \"author\" : \"abc\",\"price\" : 2.5,\"category\" : \"SE\"}")
                 .header("email","test")
+                .header("Token","dummy")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
