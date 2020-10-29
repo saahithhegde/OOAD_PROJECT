@@ -14,8 +14,6 @@ public class Users {
 
     private String answer;
 
-    private String userName;
-
     private String phoneNo;
 
     private String address;
@@ -53,14 +51,6 @@ public class Users {
 
     public void setAnswer(String answer) {
         this.answer = answer;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getPhoneNo() {

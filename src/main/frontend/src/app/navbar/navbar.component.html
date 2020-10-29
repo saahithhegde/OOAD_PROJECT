@@ -1,3 +1,17 @@
-<p>
-  navbar works!
-</p>
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" routerLink="/dashboard">Dashboard</a>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link pull-right" routerLink="/sell">Sell Books</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link pull-right" routerLink="/cart">Cart</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link pull-right" routerLink="/user">User Profile</a>
+      </li>
+      <li class="nav-item active">
+        <button class="nav-link pull-right" (click)=logout()>Logout</button>
+      </li>
+    </ul>
+</nav>
