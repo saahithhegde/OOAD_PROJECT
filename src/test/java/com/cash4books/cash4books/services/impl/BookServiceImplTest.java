@@ -56,11 +56,12 @@ public class BookServiceImplTest {
         expectedBook.setCategory("SE");
         expectedBook.setPrice(2.5);
         Users users = new Users();
-        when(sessionServiceImpl.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString(),Mockito.anyString())).thenReturn(true);
-        when(sessionService.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString(),Mockito.anyString())).thenReturn(true);
+        String email = "test";
+        when(sessionServiceImpl.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(email);
+        when(sessionService.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(email);
        when(userRepository.findUserByEmail(Mockito.anyString())).thenReturn(users);
        when(bookRepository.save(expectedBook)).thenReturn(expectedBook);
-        Book actualBook = bookService.addBook(expectedBook, httpServletRequest, "dummy-token", "test");
+        Book actualBook = bookService.addBook(expectedBook, httpServletRequest,  "test");
         assertEquals(expectedBook.getTitle(),actualBook.getTitle());
         assertEquals(expectedBook.getAuthor(),actualBook.getAuthor());
         assertEquals(expectedBook.getCategory(),actualBook.getCategory());
@@ -78,7 +79,7 @@ public class BookServiceImplTest {
         Users users = new Users();
         when(userRepository.findUserByEmail(Mockito.anyString())).thenReturn(users);
         when(bookRepository.save(expectedBook)).thenReturn(expectedBook);
-        Book actualBook = bookService.addBook(expectedBook,httpServletRequest, "dummy-token", "");
+        Book actualBook = bookService.addBook(expectedBook,httpServletRequest, "");
 
     }
 

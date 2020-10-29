@@ -25,9 +25,9 @@ public class BookDetailsController {
 
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Book> addBook(@RequestBody Book book , HttpServletRequest request, @RequestHeader(name = "Token") String token,@RequestHeader(name = "email") String userEmail){
+    public ResponseEntity<Book> addBook(@RequestBody Book book , HttpServletRequest request, @RequestHeader(name = "Token") String token){
         try {
-            book = bookServiceImpl.addBook(book,request,token,userEmail);
+            book = bookServiceImpl.addBook(book,request,token);
         } catch (Exception e) {
             logger.error("Failed to add book, user is not logged in");
             return new ResponseEntity("User not logged in", HttpStatus.BAD_REQUEST);
@@ -35,6 +35,17 @@ public class BookDetailsController {
         logger.info("Successfully added book:"+book.getTitle());
         return new ResponseEntity(book, HttpStatus.ACCEPTED);
 
+    }
+
+    @GetMapping(path = "/seller/books",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Book>> getSellerBooks(HttpServletRequest request, @RequestHeader(name = "Token") String token){
+        try {
+            List<Book> books = bookServiceImpl.getBooksOfSeller(request, token);
+            return new ResponseEntity<>(books, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @GetMapping(path = "/seller/{sellerID}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -57,7 +68,7 @@ public class BookDetailsController {
 
     @GetMapping(path = "/category/{category}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Book>> searchByCategory(@PathVariable("category") String category){
-        List<Book> books = bookServiceImpl.getBooksWithTitle(category);
+        List<Book> books = bookServiceImpl.filterByCategory(category);
         return new ResponseEntity<>(books,HttpStatus.OK);
     }
 }

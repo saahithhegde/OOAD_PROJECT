@@ -15,6 +15,14 @@ import { CartComponent } from './cart/cart.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule, MatToolbarModule, MatSidenavModule, MatListModule } from '@angular/material';
+import { LayoutModule } from '@angular/cdk/layout';
+import { LandingHomepageComponent } from './landing-homepage/landing-homepage.component';
+import { BookDetailsComponent } from './book-details/book-details.component';
+import { SellBooksComponent } from './sell-books/sell-books.component';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { ToastrModule } from 'ngx-toastr';
 
 
 //material ui
@@ -30,7 +38,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     LoginComponent,
     RegisterComponent,
     CartComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    LandingHomepageComponent,
+    BookDetailsComponent,
+    SellBooksComponent
   ],
   imports: [
     BrowserModule,
@@ -39,9 +50,22 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     HttpClientModule,
     FormsModule,
     MatFormFieldModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
+    Ng4LoadingSpinnerModule.forRoot(),
+    ToastrModule.forRoot()
   ],
   exports:[],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

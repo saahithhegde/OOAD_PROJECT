@@ -1,21 +1,42 @@
+<br>
 <div class="container">
-  <h2>LOGIN:</h2>
-  <form>
-    <div class="form-group">
-      <label for="exampleInputEmail1">Email address</label>
-      <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email" [(ngModel)]="email">
+    <div class="row justify-content-between">
+          <div class="col-8">
+              <div class="card">
+                <h5 class="card-header">User Details:</h5>
+                <div class="card-body">
+                  <div class="container">
+                    <h2>LOGIN:</h2>
+                    <form>
+                      <div class="form-group">
+                        <label >Email address</label>
+                        <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email" name="email" [(ngModel)]="emailText" required #email="ngModel" email>
+                        <div [hidden]="email.valid"
+                                class="alert alert-danger">
+                              Valid email is required
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label >Password</label>
+                      <input type="password" class="form-control" aria-describedby="emailHelp"  placeholder="Enter password" name="password" [(ngModel)]="passwordText" required #password="ngModel" minlength="6"  maxlength="8">
+                      <div [hidden]="password.valid" class="alert alert-danger">
+                        Password should contain 6 characters
+                      </div>
+                    </div>
+                      <button *ngIf="password.valid && email.valid" type="submit" class="btn btn-success" (click)="authenticate()">Submit</button>
+                      <button class="btn btn-primary float-right" (click)="redirectRegister()">Register</button>
+                    </form>
+                    <br>
+                    <div>
+                      <div *ngIf="message" class="alert alert-danger" role="alert">
+                        {{message}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
     </div>
-    <div class="form-group">
-      <label for="exampleInputPassword1">Password</label>
-      <input type="password" class="form-control"  placeholder="Password" [ngModel]="password">
-    </div>
-    <button type="submit" class="btn btn-success" (click)="authenticate()">Submit</button>
-    <button class="btn btn-primary pull-right" (click)="redirectRegister()">Register</button>
-  </form>
-  <br>
-  <div>
-    <div class="alert alert-danger" role="alert">
-      Wrong user credentials
-    </div>
-  </div>
-</div>
+
