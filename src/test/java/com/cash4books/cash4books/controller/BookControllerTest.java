@@ -1,10 +1,12 @@
 package com.cash4books.cash4books.controller;
 
 import com.cash4books.cash4books.entity.Book;
+import com.cash4books.cash4books.entity.Users;
 import com.cash4books.cash4books.services.impl.BookServiceImpl;
 import com.cash4books.cash4books.services.impl.SessionServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,6 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,6 +41,8 @@ public class BookControllerTest {
 
     @MockBean
     SessionServiceImpl sessionService;
+
+
 
     @Test
     public void addBookTest() throws Exception {
@@ -77,4 +84,117 @@ public class BookControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
+
+    @Test
+    public void searchBySellerTest() throws Exception {
+        Users user1 = new Users();
+        user1.setEmail("u1");
+        Book book = new Book();
+        book.setTitle("book_5");
+        book.setAuthor("abc");
+        book.setCategory("SE");
+        book.setPrice(2.5);
+        book.setUsers(user1);
+        List<Book> list = new ArrayList<>();
+        list.add(book);
+        when(bookService.getBooksBySeller(eq("u1"))).thenReturn(list);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/book/seller/u1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.[0].title").exists())
+                .andExpect(jsonPath("$.[0].author").exists())
+                .andExpect(jsonPath("$.[0].price").exists())
+                .andExpect(jsonPath("$.[0].category").exists())
+                .andExpect(jsonPath("$.[0].title").value("book_5"))
+                .andExpect(jsonPath("$.[0].author").value("abc"))
+                .andExpect(jsonPath("$.[0].price").value(2.5))
+                .andExpect(jsonPath("$.[0].category").value("SE"))
+                .andDo(print());
+    }
+
+    @Test
+    public void searchByAuthorTest() throws Exception {
+        Users user1 = new Users();
+        user1.setEmail("u1");
+        Book book = new Book();
+        book.setTitle("book_5");
+        book.setAuthor("abc");
+        book.setCategory("SE");
+        book.setPrice(2.5);
+        book.setUsers(user1);
+        List<Book> list = new ArrayList<>();
+        list.add(book);
+        when(bookService.filterByAuthor(eq("abc"))).thenReturn(list);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/book/author/abc")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.[0].title").exists())
+                .andExpect(jsonPath("$.[0].author").exists())
+                .andExpect(jsonPath("$.[0].price").exists())
+                .andExpect(jsonPath("$.[0].category").exists())
+                .andExpect(jsonPath("$.[0].title").value("book_5"))
+                .andExpect(jsonPath("$.[0].author").value("abc"))
+                .andExpect(jsonPath("$.[0].price").value(2.5))
+                .andExpect(jsonPath("$.[0].category").value("SE"))
+                .andDo(print());
+    }
+
+    @Test
+    public void searchByTitleTest() throws Exception {
+        Users user1 = new Users();
+        user1.setEmail("u1");
+        Book book = new Book();
+        book.setTitle("book_5");
+        book.setAuthor("abc");
+        book.setCategory("SE");
+        book.setPrice(2.5);
+        book.setUsers(user1);
+        List<Book> list = new ArrayList<>();
+        list.add(book);
+        when(bookService.getBooksWithTitle(eq("book"))).thenReturn(list);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/book/title/book")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.[0].title").exists())
+                .andExpect(jsonPath("$.[0].author").exists())
+                .andExpect(jsonPath("$.[0].price").exists())
+                .andExpect(jsonPath("$.[0].category").exists())
+                .andExpect(jsonPath("$.[0].title").value("book_5"))
+                .andExpect(jsonPath("$.[0].author").value("abc"))
+                .andExpect(jsonPath("$.[0].price").value(2.5))
+                .andExpect(jsonPath("$.[0].category").value("SE"))
+                .andDo(print());
+    }
+
+    @Test
+    public void searchByCategoryTest() throws Exception {
+        Users user1 = new Users();
+        user1.setEmail("u1");
+        Book book = new Book();
+        book.setTitle("book_5");
+        book.setAuthor("abc");
+        book.setCategory("SE");
+        book.setPrice(2.5);
+        book.setUsers(user1);
+        List<Book> list = new ArrayList<>();
+        list.add(book);
+        when(bookService.filterByCategory(eq("SE"))).thenReturn(list);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/book/category/SE")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.[0].title").exists())
+                .andExpect(jsonPath("$.[0].author").exists())
+                .andExpect(jsonPath("$.[0].price").exists())
+                .andExpect(jsonPath("$.[0].category").exists())
+                .andExpect(jsonPath("$.[0].title").value("book_5"))
+                .andExpect(jsonPath("$.[0].author").value("abc"))
+                .andExpect(jsonPath("$.[0].price").value(2.5))
+                .andExpect(jsonPath("$.[0].category").value("SE"))
+                .andDo(print());
+    }
+
 }

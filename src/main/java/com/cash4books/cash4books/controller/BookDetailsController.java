@@ -57,7 +57,7 @@ public class BookDetailsController {
 
     @GetMapping(path = "/category/{category}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Book>> searchByCategory(@PathVariable("category") String category){
-        List<Book> books = bookServiceImpl.getBooksWithTitle(category);
+        List<Book> books = bookServiceImpl.filterByCategory(category);
         return new ResponseEntity<>(books,HttpStatus.OK);
     }
 }
