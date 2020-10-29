@@ -6,11 +6,12 @@ import com.cash4books.cash4books.repository.BookRepository;
 import com.cash4books.cash4books.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@Component
+@Service
 public class BookServiceImpl {
 @Autowired
 private BookRepository bookRepository;
@@ -18,14 +19,19 @@ private BookRepository bookRepository;
 @Autowired
 private UserRepository userRepository;
 
-    public Book addBook(Book book, String email) throws Exception {
+@Autowired
+SessionServiceImpl sessionService;
+
+    public Book addBook(Book book, HttpServletRequest request, String token ) throws Exception {
         //TODO custom exception
+        String email = sessionService.getSessionValidation(request,token);
         if(email==null ||  email.equals(""))
-            throw new Exception("User not logged in");
-        Users user =  userRepository.findUserByEmail(email);
-        book.setUsers(user);
-        book = bookRepository.save(book);
-        return book;
+                throw new Exception("User not logged in");
+            Users user =  userRepository.findUserByEmail(email);
+            book.setUsers(user);
+            book = bookRepository.save(book);
+            return book;
+
     }
 
     public List<Book> filterByAuthor(String author){
