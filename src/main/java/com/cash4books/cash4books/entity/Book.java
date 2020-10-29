@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "book")
 public class Book {
+
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     Integer bookID;
 
@@ -26,6 +27,13 @@ public class Book {
     @JsonIgnore
     private Users users;
 
+    public Integer getBookID() {
+        return bookID;
+    }
+
+    public void setBookID(Integer bookID) {
+        this.bookID = bookID;
+    }
 
     public String getTitle() {
         return title;
