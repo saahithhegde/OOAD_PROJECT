@@ -1,3 +1,107 @@
-<p>
-  user-details works!
-</p>
+<br>
+<div class="container">
+    <div class="row justify-content-between">
+      <div class="col-8">
+            <div *ngIf="!formEdit" class="container">
+              <div class="card">
+                <h5 class="card-header">User Details:</h5>
+                <div class="card-body">
+                  <h5 class="card-title">User Email:</h5>
+                  <p class="card-text">{{userDetails.email}}</p>
+                  <h5 class="card-title">User Question:</h5>
+                  <p class="card-text">{{userDetails.question}}</p>
+                  <h5 class="card-title">User Answer:</h5>
+                  <p class="card-text">{{userDetails.answer}}</p>
+                  <h5 class="card-title">User Phone No:</h5>
+                  <p class="card-text">{{userDetails.phoneNo}}</p>
+                  <h5 class="card-title">User Address:</h5>
+                  <p class="card-text">{{userDetails.address}}</p>
+                  <br>
+                  <button class="btn btn-primary" (click)="onEdit()">Edit</button>
+                </div>
+              </div>
+
+              <br>
+              <div *ngIf="message" class="alert alert-danger" role="alert">
+                {{message}}
+              </div>
+            </div>
+            <div  *ngIf="formEdit" class="container">
+              <div class="card">
+                <h5 class="card-header">Edit Details:</h5>
+                <div class="container">
+              <form>
+                <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label >Email address</label>
+                  <input type="email" class="form-control" placeholder="Enter email" name="email" [(ngModel)]="modifiedUserDetails.email" required #email="ngModel" email disabled>
+              </div>
+
+              <div class="form-group col-md-4">
+                <label >Password</label>
+                <input type="password" class="form-control"   placeholder="Enter password" name="password" [(ngModel)]="modifiedUserDetails.password" required #password="ngModel" minlength="6"  maxlength="8">
+                <div [hidden]="password.valid" class="alert alert-danger">
+                  Password need 6 char
+                </div>
+              </div>
+
+              <div class="form-group col-md-4">
+                <label >Confirm Password</label>
+                <input type="password" class="form-control"   placeholder="Confirm password" name="confirmPassword" [(ngModel)]="confirmPasswordText" required #confirmPassword="ngModel" minlength="6"  maxlength="8">
+                <div [hidden]="confirmPassword.valid && confirmPassword.value==password.value" class="alert alert-danger">
+                  Passwords do not match
+                </div>
+              </div>
+
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label >Question</label>
+                <select  class="form-control" [(ngModel)]="modifiedUserDetails.question" ngModel required name="question" #question="ngModel">
+                  <option  value="pet">What Is Your Pet Name?</option>
+                  <option  value="car">What Is Your Car Name?</option>
+                  <option  value="sport">Which Sport Do You Like?</option>
+              </select>
+              <div [hidden]="question.valid" class="alert alert-danger">
+                Select Question
+              </div>
+              </div>
+
+              <div class="form-group col-md-4">
+                <label >Answer</label>
+                <input type="text" class="form-control"  placeholder="Enter Answer" name="answer" [(ngModel)]="modifiedUserDetails.answer" required #answer="ngModel">
+                <div [hidden]="answer.valid" class="alert alert-danger">
+                  Answer Required
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label >Phone</label>
+                <input type="tel" class="form-control"  placeholder="Enter Phone" name="phone" [(ngModel)]="modifiedUserDetails.phoneNo" #phone="ngModel">
+              </div>
+
+              <div class="form-group col-md-4">
+                <label>Address</label>
+                <input type="text" class="form-control"  placeholder="Enter Address" name="Address" [(ngModel)]="modifiedUserDetails.address" #address="ngModel">
+              </div>
+            </div>
+
+                <button class="btn btn-danger" (click)="onEditclose()">Cancel</button>
+                <button type="submit" *ngIf="password.valid && confirmPassword.valid && question.valid && answer.valid && password.value==confirmPassword.value" class="btn btn-primary float-right" (click)="updateUserDetails()()">Register</button>
+              </form>
+              </div>
+              </div>
+            </div>
+            <br>
+              <div *ngIf="editMessage" class="alert alert-danger" role="alert">
+                {{editMessage}}
+              </div>
+        </div>
+
+      <div class="col-4">
+        One of two columns
+      </div>
+    </div>
+</div>
