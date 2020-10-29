@@ -25,9 +25,9 @@ public class BookDetailsController {
 
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Book> addBook(@RequestBody Book book , HttpServletRequest request, @RequestHeader(name = "Token") String token,@RequestHeader(name = "email") String userEmail){
+    public ResponseEntity<Book> addBook(@RequestBody Book book , HttpServletRequest request, @RequestHeader(name = "Token") String token){
         try {
-            book = bookServiceImpl.addBook(book,request,token,userEmail);
+            book = bookServiceImpl.addBook(book,request,token);
         } catch (Exception e) {
             logger.error("Failed to add book, user is not logged in");
             return new ResponseEntity("User not logged in", HttpStatus.BAD_REQUEST);
