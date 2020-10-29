@@ -22,16 +22,15 @@ private UserRepository userRepository;
 @Autowired
 SessionServiceImpl sessionService;
 
-    public Book addBook(Book book, HttpServletRequest request, String token, String email ) throws Exception {
+    public Book addBook(Book book, HttpServletRequest request, String token ) throws Exception {
         //TODO custom exception
-        if(sessionService.getSessionValidation(request,token,email)){
-            if(email==null ||  email.equals(""))
+        String email = sessionService.getSessionValidation(request,token);
+        if(email==null ||  email.equals(""))
                 throw new Exception("User not logged in");
             Users user =  userRepository.findUserByEmail(email);
             book.setUsers(user);
             book = bookRepository.save(book);
             return book;
-        } else throw new Exception("User not logged in");
 
     }
 

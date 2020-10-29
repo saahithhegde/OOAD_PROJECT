@@ -44,8 +44,9 @@ public class BookControllerTest {
         book.setAuthor("abc");
         book.setCategory("SE");
         book.setPrice(2.5);
-        when(sessionService.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString(),Mockito.anyString())).thenReturn(true);
-        when(bookService.addBook(Mockito.any(Book.class),Mockito.any(HttpServletRequest.class),Mockito.anyString(),Mockito.anyString())).thenReturn(book);
+        String email = "test";
+        when(sessionService.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(email);
+        when(bookService.addBook(Mockito.any(Book.class),Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(book);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/book/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"title\":\"book_5\", \"author\" : \"abc\",\"price\" : 2.5,\"category\" : \"SE\"}")
@@ -65,7 +66,8 @@ public class BookControllerTest {
     }
     @Test(expected = Exception.class)
     public void addBookExceptionTest() throws Exception {
-        when(sessionService.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString(),Mockito.anyString())).thenReturn(false);
+        String email = "";
+        when(sessionService.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(email);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/book/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"title\":\"book_5\", \"author\" : \"abc\",\"price\" : 2.5,\"category\" : \"SE\"}")
