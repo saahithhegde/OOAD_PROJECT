@@ -75,7 +75,7 @@ public class UserControllerTest {
     }
 
     @Test(expected = Exception.class)
-    public void addBookExceptionTest() throws Exception {
+    public void createUserExceptionTest() throws Exception {
         doThrow(Exception.class).when(userService.createUser(Mockito.any(Users.class)));
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/createUser")
                 .contentType(MediaType.APPLICATION_JSON)
