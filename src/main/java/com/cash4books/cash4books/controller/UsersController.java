@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -33,16 +35,19 @@ public class UsersController {
     }
 
     @PostMapping(value = {"/login"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> login(@RequestBody UsersLoginDto usersLoginDto, HttpServletRequest request) {
+    public ResponseEntity<?> login(@RequestBody UsersLoginDto usersLoginDto, HttpServletRequest request) {
         try {
+            Map<String, Object> response = new HashMap<>();
             String userSessionInfo = userService.authenticateUser(usersLoginDto, request);
-            return new ResponseEntity(userSessionInfo, HttpStatus.ACCEPTED);
+            response.put("token",userSessionInfo);
+            return new ResponseEntity<>(response,HttpStatus.ACCEPTED);
+
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 
-    @GetMapping(value = {"/getProfile"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = {"/getProfile"}, produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Users> getProfile(HttpServletRequest request, @RequestHeader(name = "Token") String token) {
         try {
             Users getUserProfile = userService.getUserProfile(request, token);
