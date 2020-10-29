@@ -53,25 +53,22 @@ public class UserControllerTest {
         user.setQuestion("Pet name");
         user.setAnswer("test");
         user.setPhoneNo("1241342");
-        user.setUserName("sample2");
         when(userService.createUser(Mockito.any(Users.class))).thenReturn(user);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/createUser")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{ \"email\":\"sample2@utdallas.edu\", \"password\" : \"test12\", \"question\" : \"Pet name\", \"answer\" : \"test\", \"userName\" : \"sample2\", \"phoneNo\" : \"1241342\", \"address\" : \"Renner Rd\"}")
+                .content("{ \"email\":\"sample2@utdallas.edu\", \"password\" : \"test12\", \"question\" : \"Pet name\", \"answer\" : \"test\",  \"phoneNo\" : \"1241342\", \"address\" : \"Renner Rd\"}")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.email").exists())
                 .andExpect(jsonPath("$.password").exists())
                 .andExpect(jsonPath("$.question").exists())
                 .andExpect(jsonPath("$.answer").exists())
-                .andExpect(jsonPath("$.userName").exists())
                 .andExpect(jsonPath("$.phoneNo").exists())
                 .andExpect(jsonPath("$.address").exists())
                 .andExpect(jsonPath("$.email").value("sample2@utdallas.edu"))
                 .andExpect(jsonPath("$.password").value("test12"))
                 .andExpect(jsonPath("$.question").value("Pet name"))
                 .andExpect(jsonPath("$.answer").value("test"))
-                .andExpect(jsonPath("$.userName").value("sample2"))
                 .andExpect(jsonPath("$.phoneNo").value("1241342"))
                 .andExpect(jsonPath("$.address").value("Renner Rd"))
                 .andDo(print());
@@ -133,7 +130,6 @@ public class UserControllerTest {
         user.setQuestion("Pet name");
         user.setAnswer("test");
         user.setPhoneNo("1241342");
-        user.setUserName("sample2");
         when(userService.getUserProfile(Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(user);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/getProfile")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -144,7 +140,6 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.password").exists())
                 .andExpect(jsonPath("$.question").exists())
                 .andExpect(jsonPath("$.answer").exists())
-                .andExpect(jsonPath("$.userName").exists())
                 .andExpect(jsonPath("$.phoneNo").exists())
                 .andExpect(jsonPath("$.address").exists())
                 .andExpect(jsonPath("$.email").value("sample2@utdallas.edu"))
@@ -166,26 +161,23 @@ public class UserControllerTest {
         user.setQuestion("Pet name");
         user.setAnswer("test");
         user.setPhoneNo("1241342");
-        user.setUserName("sample2");
         when(userService.updateUserProfile(Mockito.any(Users.class),Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(user);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users/updateProfile")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Token","sample2@utdallas.edu")
-                .content("{ \"email\":\"sample2@utdallas.edu\", \"password\" : \"test12\", \"question\" : \"Pet name\", \"answer\" : \"test\", \"userName\" : \"sample2\", \"phoneNo\" : \"1241342\", \"address\" : \"Renner Rd\"}")
+                .content("{ \"email\":\"sample2@utdallas.edu\", \"password\" : \"test12\", \"question\" : \"Pet name\", \"answer\" : \"test\", \"phoneNo\" : \"1241342\", \"address\" : \"Renner Rd\"}")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.email").exists())
                 .andExpect(jsonPath("$.password").exists())
                 .andExpect(jsonPath("$.question").exists())
                 .andExpect(jsonPath("$.answer").exists())
-                .andExpect(jsonPath("$.userName").exists())
                 .andExpect(jsonPath("$.phoneNo").exists())
                 .andExpect(jsonPath("$.address").exists())
                 .andExpect(jsonPath("$.email").value("sample2@utdallas.edu"))
                 .andExpect(jsonPath("$.password").value("test12"))
                 .andExpect(jsonPath("$.question").value("Pet name"))
                 .andExpect(jsonPath("$.answer").value("test"))
-                .andExpect(jsonPath("$.userName").value("sample2"))
                 .andExpect(jsonPath("$.phoneNo").value("1241342"))
                 .andExpect(jsonPath("$.address").value("Renner Rd"))
                 .andDo(print());
@@ -200,7 +192,6 @@ public class UserControllerTest {
         user.setQuestion("Pet name");
         user.setAnswer("test");
         user.setPhoneNo("1241342");
-        user.setUserName("sample2");
         ForgotPasswordDto forgotPasswordDto = new ForgotPasswordDto();
         forgotPasswordDto.setEmail("sample2@utdallas.edu");
         forgotPasswordDto.setQuestion("Pet name");
