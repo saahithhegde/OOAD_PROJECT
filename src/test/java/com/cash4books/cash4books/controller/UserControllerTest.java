@@ -146,7 +146,6 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.password").value("test12"))
                 .andExpect(jsonPath("$.question").value("Pet name"))
                 .andExpect(jsonPath("$.answer").value("test"))
-                .andExpect(jsonPath("$.userName").value("sample2"))
                 .andExpect(jsonPath("$.phoneNo").value("1241342"))
                 .andExpect(jsonPath("$.address").value("Renner Rd"))
                 .andDo(print());
