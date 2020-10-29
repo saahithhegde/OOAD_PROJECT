@@ -21,6 +21,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { LandingHomepageComponent } from './landing-homepage/landing-homepage.component';
 import { BookDetailsComponent } from './book-details/book-details.component';
 import { SellBooksComponent } from './sell-books/sell-books.component';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { ToastrModule } from 'ngx-toastr';
 
 
 //material ui
@@ -57,6 +59,8 @@ import { SellBooksComponent } from './sell-books/sell-books.component';
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
+    Ng4LoadingSpinnerModule.forRoot(),
+    ToastrModule.forRoot()
   ],
   exports:[],
   providers: [],
