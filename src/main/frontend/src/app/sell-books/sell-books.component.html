@@ -1,0 +1,91 @@
+<br>
+<div class="container">
+    <div class="row justify-content-between">
+      <div class="col-8">
+            <div class="container">
+              <div class="card">
+                <h5 class="card-header">Add Listing:</h5>
+                <div class="container">
+              <form>
+                <div class="form-row">
+
+                  <div class="form-group col-md-4">
+                    <label >Book Title</label>
+                    <input type="text" class="form-control"  placeholder="Enter Title" name="title" [(ngModel)]="addBookDto.title" required #title="ngModel">
+                    <div [hidden]="title.valid" class="alert alert-danger">
+                      Book Title Required
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label >Book Author</label>
+                    <input type="text" class="form-control"  placeholder="Enter Author Name" name="author" [(ngModel)]="addBookDto.author" required #author="ngModel">
+                    <div [hidden]="author.valid" class="alert alert-danger">
+                      Author Name Required
+                    </div>
+                  </div>
+
+                    <div class="form-group col-md-4">
+                      <label>Category</label>
+                      <select  class="form-control" [(ngModel)]="addBookDto.category" ngModel required name="category" #category="ngModel">
+                        <option  value="pet">What Is Your Pet Name?</option>
+                        <option  value="car">What Is Your Car Name?</option>
+                        <option  value="sport">Which Sport Do You Like?</option>
+                    </select>
+                    <div [hidden]="category.valid" class="alert alert-danger">
+                      Select Category
+                    </div>
+                    </div>
+
+                  <div class="form-group col-md-4">
+                    <label >Book Price</label>
+                    <input type="number" class="form-control"  placeholder="Enter Price" name="price" [(ngModel)]="addBookDto.price" required #price="ngModel" min="0" max="99999">
+                    <div [hidden]="price.valid && price.value > 0" class="alert alert-danger">
+                      Book Price Required and should be more than 0
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-8">
+                    <label >Upload Image</label>
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+                      <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                    </div>
+                  </div>
+
+
+            </div>
+
+                <button *ngIf="title.valid && author.valid && price.valid && category.valid && price.value > 0" class="btn btn-primary" (click)="addBook()">Add Book</button>
+              </form>
+              </div>
+              </div>
+            </div>
+            <br>
+        </div>
+
+      <div class="col-4">
+        <div class="card">
+          <h5 class="card-header">My Listings:</h5>
+          <div class="card-body">
+            <div *ngIf="userBooksArray.length>0">
+            <div *ngFor="let book of userBooksArray" class="row">
+              <div class="h-75 container" style="overflow: auto;">
+                <figure class="card card-product-grid">
+                  <div class="img-wrap"> <img src="bootstrap-ecommerce-html/images/items/1.jpg"> </div>
+                  <figcaption class="info-wrap border-top">
+                    <a class="title">Title:{{book.title}}</a>
+                    <p class="title">Title:{{book.author}}</p>
+                    <p class="title">Title:{{book.bookID}}</p>
+                    <div class="price mt-2">${{book.price}}</div> <!-- price-wrap.// -->
+                    <button (click)="deleteBook(book)" class="btn btn-sm btn-outline-danger float-right">Delete Listing</button>
+                  </figcaption>
+                </figure> <!-- card // -->
+              </div> <!-- col.// -->
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

@@ -37,6 +37,17 @@ public class BookDetailsController {
 
     }
 
+    @GetMapping(path = "/seller/books",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Book>> getSellerBooks(HttpServletRequest request, @RequestHeader(name = "Token") String token){
+        try {
+            List<Book> books = bookServiceImpl.getBooksOfSeller(request, token);
+            return new ResponseEntity<>(books, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     @GetMapping(path = "/seller/{sellerID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Book>> searchSeller(@PathVariable("sellerID") String id){
         List<Book> books = bookServiceImpl.getBooksBySeller(id);
