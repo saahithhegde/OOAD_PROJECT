@@ -71,7 +71,7 @@ public class UsersController {
     @GetMapping(value = {"/logout"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateProfile(HttpServletRequest request) {
         userService.logoutUser(request);
-        return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Logged out successfully", HttpStatus.ACCEPTED);
     }
 
     @PostMapping(value = {"/forgotPassword"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -79,7 +79,7 @@ public class UsersController {
         try {
             Users users = userService.forgotPassword(forgotPasswordDto);
             if (users !=null) {
-                return new ResponseEntity("successfully changed password", HttpStatus.OK);
+                return new ResponseEntity(users, HttpStatus.ACCEPTED);
             }
             return new ResponseEntity("failed", HttpStatus.BAD_REQUEST);
 

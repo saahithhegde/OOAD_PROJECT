@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TokenDto } from '../model/token.model';
+import { ForgotModelDto } from '../model/forgotPassword.model';
 
 @Injectable({
   providedIn: 'root'
@@ -30,5 +31,8 @@ export class UserServiceService {
    updateUserDetails(userDetials:UserModelDto):Observable<UserModelDto>{
      var header=this.commonServices.getHeaders();
      return this.httpClient.post<UserModelDto>(AppConstants.UPDATEPROFILE,userDetials,{headers:header});
+   }
+   forgotpassword(forgotPassword:ForgotModelDto): Observable<UserModelDto>{
+    return this.httpClient.post<UserModelDto>(AppConstants.FORGOTPASSWORD,forgotPassword);
    }
 }

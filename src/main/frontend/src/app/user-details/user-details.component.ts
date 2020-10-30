@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { NotificationService } from '../services/notification.service';
 
-/*@Component({
+@Component({
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.css']
@@ -60,20 +60,6 @@ export class UserDetailsComponent implements OnInit {
 
   onEditclose(){
     this.formEdit=false;
-  }
-
-}*/
-
-@Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
-})
-export class LoginComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
   }
 
 }
