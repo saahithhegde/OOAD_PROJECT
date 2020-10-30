@@ -118,6 +118,9 @@ public class UserServiceImpl implements UserService {
                 userDetails.setPassword(forgotPasswordDto.getPassword());
                 userRepository.save(userDetails);
                 logger.info("new password set");
+                userDetails.setPassword("");
+                userDetails.setQuestion("");
+                userDetails.setAnswer("");
                 return userDetails;
             }
             else{
