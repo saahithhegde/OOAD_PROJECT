@@ -197,15 +197,14 @@ public class UserControllerTest {
         forgotPasswordDto.setAnswer("test");
         forgotPasswordDto.setPassword("new_test12");
         when(userService.forgotPassword(Mockito.any(ForgotPasswordDto.class))).thenReturn(user);
-        Assert.assertTrue(mockMvc.perform(MockMvcRequestBuilders.post("/api/users/forgotPassword")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/forgotPassword")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{ \"email\":\"sample2@utdallas.edu\", \"password\" : \"new_test12\", \"question\" : \"Pet name\", \"answer\" : \"test\"}")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
-                .andReturn()
-                .getResponse()
-                .getContentAsString()
-                .contains("successfully changed password"));
+                .andExpect(jsonPath("$.email").exists())
+                .andExpect(jsonPath("$.answer").exists())
+                .andExpect(jsonPath("$.phoneNo").exists());
     }
 
 
