@@ -1,5 +1,7 @@
 package com.cash4books.cash4books.controller;
 
+import com.cash4books.cash4books.dto.book.BookDto;
+import com.cash4books.cash4books.dto.book.BookDtoQuery;
 import com.cash4books.cash4books.services.impl.BookServiceImpl;
 import com.cash4books.cash4books.entity.Book;
 import com.cash4books.cash4books.services.impl.UserServiceImpl;
@@ -37,6 +39,13 @@ public class BookDetailsController {
 
     }
 
+    @GetMapping(path = "/getDistinctIsbn",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<BookDtoQuery>>getDistinctIsbn(){
+        List<BookDtoQuery> books=bookServiceImpl.fetchAllDistinctIsbn();
+        return new ResponseEntity<>(books,HttpStatus.OK);
+    }
+
+
     @GetMapping(path = "/seller/books",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Book>> getSellerBooks(HttpServletRequest request, @RequestHeader(name = "Token") String token){
         try {
@@ -46,6 +55,13 @@ public class BookDetailsController {
         catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
+    }
+
+
+    @GetMapping(path = "/isbn/{isbn}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Book>> searchIsbn(@PathVariable("isbn") String isbn){
+        List<Book> books=bookServiceImpl.getBooksByIsbn(isbn);
+        return new ResponseEntity<>(books,HttpStatus.OK);
     }
 
     @GetMapping(path = "/seller/{sellerID}", produces = MediaType.APPLICATION_JSON_VALUE)
