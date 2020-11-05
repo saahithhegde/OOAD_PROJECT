@@ -1,5 +1,7 @@
 package com.cash4books.cash4books.services.impl;
 
+import com.cash4books.cash4books.dto.book.BookDto;
+import com.cash4books.cash4books.dto.book.BookDtoQuery;
 import com.cash4books.cash4books.entity.Book;
 import com.cash4books.cash4books.entity.Users;
 import com.cash4books.cash4books.exception.UserNotLoggedInException;
@@ -33,6 +35,16 @@ SessionServiceImpl sessionService;
             book = bookRepository.save(book);
             return book;
 
+    }
+
+    public List<Book> getBooksByIsbn(String isbn){
+        List<Book> books = bookRepository.findAllByIsbn(isbn);
+        return books;
+    }
+
+    public List<BookDtoQuery> fetchAllDistinctIsbn(){
+        List<BookDtoQuery>books=bookRepository.fetchAllDisticntIsbn();
+        return books;
     }
 
     public List<Book> filterByAuthor(String author){

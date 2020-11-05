@@ -1,4 +1,6 @@
 package com.cash4books.cash4books.entity;
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,9 +9,9 @@ public class Users {
 
     @Id
     private String email;
-
+    @NotNull
     private String password;
-
+    @NotNull
     private String question;
 
     private String answer;
@@ -19,7 +21,7 @@ public class Users {
     private String address;
 
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private String cartId;
+    private int cartId;
 
     public String getEmail() {
         return email;
@@ -69,11 +71,11 @@ public class Users {
         this.address = address;
     }
 
-    public String getCartId() {
+    public int getCartId() {
         return cartId;
     }
 
-    public void setCartId(String cartId) {
+    public void setCartId(int cartId) {
         this.cartId = cartId;
     }
 
