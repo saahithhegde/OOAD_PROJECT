@@ -47,6 +47,11 @@ SessionServiceImpl sessionService;
         return books;
     }
 
+    public Book getBookById(Integer Id){
+        Book book=bookRepository.findByBookID(Id);
+        return book;
+    }
+
     public List<Book> filterByAuthor(String author){
         List<Book> books = bookRepository.findAllByAuthor(author);
         return books;
@@ -75,5 +80,9 @@ SessionServiceImpl sessionService;
         Users user = userRepository.findUserByEmail(email);
         List<Book> books = bookRepository.findAllByUsers(user);
         return books;
+    }
+
+    public Book getUserBook(Integer bookId,Users users){
+        return bookRepository.findBookByBookIDAndUsers(bookId,users);
     }
 }

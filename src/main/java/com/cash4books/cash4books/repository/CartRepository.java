@@ -1,4 +1,13 @@
 package com.cash4books.cash4books.repository;
 
-public interface CartRepository {
+import com.cash4books.cash4books.entity.Cart;
+import com.cash4books.cash4books.entity.Users;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface CartRepository extends CrudRepository<Cart, Integer> {
+    List<Cart> findAllByUsers(Users users);
 }
