@@ -13,6 +13,8 @@ public class Book {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     Integer bookID;
 
+    String isbn;
+
     String title;
 
     String author;
@@ -73,5 +75,12 @@ public class Book {
 
     public void setUsers(Users users) {
         this.users = users;
+    }
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 }

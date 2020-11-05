@@ -69,4 +69,5 @@ public class SessionServiceImplTest {
         HttpSession session = request.getSession(false);
         Assert.assertNull(session);
     }
+
 }
