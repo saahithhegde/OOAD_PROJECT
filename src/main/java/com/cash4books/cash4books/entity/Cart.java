@@ -11,12 +11,38 @@ import javax.persistence.*;
 public class Cart {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Integer cartID;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private String email;
+    private Users users;
 
     private Integer bookID;
 
+    public Integer getCartID() {
+        return cartID;
+    }
+
+    public void setCartID(Integer cartID) {
+        this.cartID = cartID;
+    }
+
+    public Users getUser() {
+        return users;
+    }
+
+    public void setUser(Users user) {
+        this.users = user;
+    }
+
+    public Integer getBookID() {
+        return bookID;
+    }
+
+    public void setBookID(Integer bookID) {
+        this.bookID = bookID;
+    }
 }
