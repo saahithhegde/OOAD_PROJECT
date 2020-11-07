@@ -1,7 +1,12 @@
 package com.cash4books.cash4books.controller;
 
-import com.cash4books.cash4books.dto.cart.CartDTO;
+import com.cash4books.cash4books.entity.Book;
+import com.cash4books.cash4books.entity.Orders;
+import com.cash4books.cash4books.entity.Users;
 import com.cash4books.cash4books.services.impl.CartServiceImpl;
+import com.cash4books.cash4books.services.impl.PaymentServiceImpl;
+import com.cash4books.cash4books.services.impl.UserServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +28,42 @@ public class PaymentController {
     @Autowired
     CartServiceImpl cartServiceImpl;
 
+    @Autowired
+    PaymentServiceImpl paymentServiceImpl;
+
+    @Autowired
+    UserServiceImpl userServiceImpl;
+
     Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
     @GetMapping(value="/submit" ,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CartDTO>> submitPayment(HttpServletRequest request, @RequestHeader(name = "Token") String token){
+    public ResponseEntity<Orders> submitPayment(HttpServletRequest request, @RequestHeader(name = "Token") String token, String paymentType){
+        //TODO: Handle transaction, and delete books from the available books after buy
+        Users buyer;
         try {
-            return
+             buyer = userServiceImpl.getUserProfile(request,token);
         } catch (Exception e) {
-
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
+
+        List<Integer> bookIdList;
+        try{
+            bookIdList = paymentServiceImpl.getBooksInCart(buyer);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        List<Book> availableBooks;
+        availableBooks = paymentServiceImpl.getAvailableBooks(bookIdList);
+        if(availableBooks==null || availableBooks.size() != bookIdList.size()){
+            return new ResponseEntity("Few books in cart are not available. Available books are:"+paymentServiceImpl.getBooksJson(availableBooks),HttpStatus.BAD_REQUEST);
+        }
+        Orders orders;
+        try {
+            orders = paymentServiceImpl.createOrder(availableBooks,buyer,paymentType);
+        } catch (JsonProcessingException e) {
+            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(orders,HttpStatus.ACCEPTED);
     }
 
 }
