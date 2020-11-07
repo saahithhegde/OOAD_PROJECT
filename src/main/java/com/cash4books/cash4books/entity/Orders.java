@@ -23,6 +23,8 @@ public class Orders {
 
     private double total;
 
+    @Lob
+    @Column(name="books_bought")
     private String booksBought;
 
     private String paymentType;
