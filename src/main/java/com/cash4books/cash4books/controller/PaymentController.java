@@ -63,6 +63,11 @@ public class PaymentController {
         } catch (JsonProcessingException e) {
             return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        try {
+            orders = paymentServiceImpl.executeTransaction(orders,availableBooks,buyer);
+        } catch (Exception e) {
+            return new ResponseEntity("Failed to execute transaction, Please try again later",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return new ResponseEntity(orders,HttpStatus.ACCEPTED);
     }
 

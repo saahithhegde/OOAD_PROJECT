@@ -17,7 +17,11 @@ public class Orders {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Users users;
+
+    @Column(name="user_id", updatable=false, insertable=false)
+    private String emailID;
 
     private Date orderDate;
 
@@ -75,5 +79,13 @@ public class Orders {
 
     public void setPaymentType(String paymentType) {
         this.paymentType = paymentType;
+    }
+
+    public String getEmailID() {
+        return emailID;
+    }
+
+    public void setEmailID(String emailID) {
+        this.emailID = emailID;
     }
 }

@@ -14,14 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class PaymentServiceImpl {
     @Autowired
     CartRepository cartRepository;
@@ -78,6 +79,7 @@ public class PaymentServiceImpl {
       String booksJson = objectMapper.writeValueAsString(bookList);
       orders.setBooksBought(booksJson);
       orders = orderRepository.save(orders);
+
       return orders;
   }
 
@@ -102,6 +104,17 @@ public class PaymentServiceImpl {
         } catch (JsonProcessingException e) {
             return "";
         }
+    }
+
+
+    public Orders executeTransaction(Orders orders, List<Book> books, Users buyer) throws Exception {
+        orders = orderRepository.save(orders);
+        if(orders!=null){
+        bookRepository.deleteAll(books);
+        cartRepository.deleteCartByUsers(buyer);
+        }
+        else throw new Exception("Failed to execute transaction");
+        return orders;
     }
 
 
