@@ -26,4 +26,13 @@ export class BookServiceService {
     var header=this.commonServices.getHeaders();
     return this.httpClient.post<BookDto>(AppConstants.DELETEUSERBOOK,{headers:header});
   }
+
+  getDashBoardDetails():Observable<Array<BookDto>>{
+    return this.httpClient.get<Array<BookDto>>(AppConstants.GETDASHBOOK);
+  }
+
+  getBookByIsbn(isbn:string):Observable<Array<BookDto>>{
+    return this.httpClient.get<Array<BookDto>>(`/api/book/isbn/${isbn}`);
+  }
+
 }

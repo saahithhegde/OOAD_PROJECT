@@ -11,6 +11,10 @@ export class AppConstants{
   public static readonly ADDBOOK="/api/book/add";
   public static readonly GETUSERBOOKS="/api/book/seller/books";
   public static readonly DELETEUSERBOOK="/api/book/seller/books";
+  public static readonly GETDASHBOOK="/api/book/getDistinctIsbn";
 
+  //cart api
+  public static readonly ADDTOCART="api/cart/add";
+  public static readonly GETUSERCART="api/cart/getUserCart";
 
 }

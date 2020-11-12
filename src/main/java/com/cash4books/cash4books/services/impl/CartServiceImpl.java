@@ -44,6 +44,10 @@ public class CartServiceImpl implements CartService {
             if(userOwnBook!=null){
                 throw new Exception("Cannot Purchase Your Own Product");
             }
+            Cart cart = cartRepository.findCartByBookIDAndUsers(book.getBookID(),user);
+            if(cart!=null){
+                throw new Exception("Already Added To Cart");
+            }
             Cart newCartItem=new Cart();
             newCartItem.setUser(user);
             newCartItem.setBookID(book.getBookID());

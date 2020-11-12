@@ -25,7 +25,7 @@ public class SessionServiceImpl implements SessionService {
             byte[] decarray = Base64.decodeBase64(dectryptArray);
             String decryptedEmail = new String(decarray,"UTF-8");
             String sessionDetails = (String) request.getSession().getAttribute("USER_SESSION_ATTRIBUTES");
-            if (sessionDetails.equals(token)) {
+            if (sessionDetails!=null && sessionDetails.equals(token)) {
                 logger.info("valid session");
                 return decryptedEmail;
             }
