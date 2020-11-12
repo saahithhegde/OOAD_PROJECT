@@ -68,8 +68,8 @@ SessionServiceImpl sessionService;
     }
 
     public List<Book> getBooksBySeller(String id) {
-        Users user = userRepository.findUserByEmail(id);
-        List<Book> books = bookRepository.findAllByUsers(user);
+        //Users user = userRepository.findUserByEmail(id);
+        List<Book> books = bookRepository.findAllByEmailID(id);
         return books;
     }
 

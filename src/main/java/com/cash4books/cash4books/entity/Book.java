@@ -29,6 +29,18 @@ public class Book {
     @JsonIgnore
     private Users users;
 
+    public String getEmailID() {
+        return emailID;
+    }
+
+    public void setEmailID(String emailID) {
+        this.emailID = emailID;
+    }
+
+    @Column(name="user_id", updatable=false, insertable=false)
+    private String emailID;
+
+
     public Integer getBookID() {
         return bookID;
     }
