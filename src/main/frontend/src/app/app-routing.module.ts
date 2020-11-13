@@ -20,7 +20,7 @@ const routes: Routes = [
     { path: '', component: DashboardComponent,canActivate:[AuthGuardService]},
     { path: 'cart', component: CartComponent,canActivate:[AuthGuardService]},
     { path: 'sell', component: SellBooksComponent,canActivate:[AuthGuardService]},
-    { path: 'bookdetails', component: BookDetailsComponent,canActivate:[AuthGuardService]},
+    { path: 'bookdetails/:isbn', component: BookDetailsComponent,canActivate:[AuthGuardService]},
     { path: 'dashboard', component: DashboardComponent,canActivate:[AuthGuardService]},
     { path: 'user', component: UserDetailsComponent,canActivate:[AuthGuardService]}
   ]},

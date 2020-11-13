@@ -23,7 +23,7 @@ public interface BookRepository extends CrudRepository<Book, Integer> {
     Book findBookByBookIDAndUsers(Integer bookID,Users users);
     List<Book> findByBookIDIn(List<Integer> bookList);
 
-    @Query("SELECT new com.cash4books.cash4books.dto.book.BookDtoQuery(b.isbn ,b.title,COUNT(b)) FROM Book b GROUP BY b.isbn")
+    @Query("SELECT new com.cash4books.cash4books.dto.book.BookDtoQuery(b.isbn ,b.title,b.author,b.category,COUNT(b)) FROM Book b GROUP BY b.isbn")
     List<BookDtoQuery> fetchAllDisticntIsbn();
 
 

@@ -16,6 +16,7 @@ export class UserDetailsComponent implements OnInit {
     message:string;
     editMessage:string;
     confirmPasswordText:string;
+    xyz
   constructor(private notificationService:NotificationService,private userServiceService:UserServiceService,private spinnerService: Ng4LoadingSpinnerService ) { }
 
   ngOnInit() {

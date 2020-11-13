@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface CartService {
     public CartDTO addToCart(Book book, HttpServletRequest request, String token) throws UnsupportedEncodingException, Exception;
-    public CartDTO deleteFromCart(Cart cart,HttpServletRequest request,String token) throws UnsupportedEncodingException, Exception;
+    public CartDTO deleteFromCart(Book book,HttpServletRequest request,String token) throws UnsupportedEncodingException, Exception;
     public List<CartDTO> getUserCart(HttpServletRequest request,String token)throws UnsupportedEncodingException, Exception;
 }
