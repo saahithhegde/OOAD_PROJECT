@@ -67,9 +67,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDTO deleteFromCart(Cart cart, HttpServletRequest request,String token) throws UnsupportedEncodingException, Exception {
+    public CartDTO deleteFromCart(Book book, HttpServletRequest request,String token) throws UnsupportedEncodingException, Exception {
         String email=sessionService.getSessionValidation(request,token);
         if(email!=null) {
+            Users user=userService.getUserProfile(request,token);
+            Cart cart=cartRepository.findCartByBookIDAndUsers(book.getBookID(), user);
+            if(cart==null){
+                throw new Exception("Error Please Contact Administrator");
+            }
             cartRepository.delete(cart);
             logger.info("Successfully deleted book from cart:");
             CartDTO deletedCartItem=new CartDTO();

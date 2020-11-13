@@ -16,5 +16,6 @@ export class AppConstants{
   //cart api
   public static readonly ADDTOCART="api/cart/add";
   public static readonly GETUSERCART="api/cart/getUserCart";
+  public static readonly DELETEFROMCART="api/cart/delete";
 
 }
