@@ -128,15 +128,19 @@ public class BookServiceImplTest {
     @Test
     public void filterBookBySellerTest() throws Exception {
         Book expectedBook = new Book();
+        Users users = new Users();
+        String email = "test";
+        users.setEmail(email);
+        expectedBook.setUsers(users);
         expectedBook.setTitle("book_5");
         expectedBook.setAuthor("abc");
         expectedBook.setCategory("SE");
         expectedBook.setPrice(2.5);
         List<Book> list = new ArrayList<>();
         list.add(expectedBook);
-        when(userRepository.findUserByEmail(Mockito.anyString())).thenReturn(new Users());
-        when(bookRepository.findAllByUsers(Mockito.any(Users.class))).thenReturn(list);
-        List<Book> result = bookService.getBooksBySeller( "SE");
+        when(userRepository.findUserByEmail(Mockito.anyString())).thenReturn(users);
+        when(bookRepository.findAllByEmailID(Mockito.anyString())).thenReturn(list);
+        List<Book> result = bookService.getBooksBySeller( "test");
         assertEquals(1,result.size());
     }
 

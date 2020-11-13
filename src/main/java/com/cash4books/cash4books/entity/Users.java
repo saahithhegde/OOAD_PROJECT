@@ -20,9 +20,6 @@ public class Users {
 
     private String address;
 
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private int cartId;
-
     public String getEmail() {
         return email;
     }
@@ -70,17 +67,6 @@ public class Users {
     public void setAddress(String address) {
         this.address = address;
     }
-
-    public int getCartId() {
-        return cartId;
-    }
-
-    public void setCartId(int cartId) {
-        this.cartId = cartId;
-    }
-
-
-
 
 }
 
