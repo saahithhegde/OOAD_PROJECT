@@ -44,6 +44,10 @@ public class CartServiceImpl implements CartService {
             if(userOwnBook!=null){
                 throw new Exception("Cannot Purchase Your Own Product");
             }
+            Cart cart = cartRepository.findCartByBookIDAndUsers(book.getBookID(),user);
+            if(cart!=null){
+                throw new Exception("Already Added To Cart");
+            }
             Cart newCartItem=new Cart();
             newCartItem.setUser(user);
             newCartItem.setBookID(book.getBookID());
@@ -63,9 +67,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDTO deleteFromCart(Cart cart, HttpServletRequest request,String token) throws UnsupportedEncodingException, Exception {
+    public CartDTO deleteFromCart(Book book, HttpServletRequest request,String token) throws UnsupportedEncodingException, Exception {
         String email=sessionService.getSessionValidation(request,token);
         if(email!=null) {
+            Users user=userService.getUserProfile(request,token);
+            Cart cart=cartRepository.findCartByBookIDAndUsers(book.getBookID(), user);
+            if(cart==null){
+                throw new Exception("Error Please Contact Administrator");
+            }
             cartRepository.delete(cart);
             logger.info("Successfully deleted book from cart:");
             CartDTO deletedCartItem=new CartDTO();

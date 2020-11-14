@@ -37,9 +37,9 @@ public class CartController {
       }
 
     @PostMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CartDTO> DeleteBookFromCart(@RequestBody Cart cart , HttpServletRequest request, @RequestHeader(name = "Token") String token){
+    public ResponseEntity<CartDTO> DeleteBookFromCart(@RequestBody Book book , HttpServletRequest request, @RequestHeader(name = "Token") String token){
         try {
-            CartDTO deletedCartItem = cartServiceImpl.deleteFromCart(cart,request,token);
+            CartDTO deletedCartItem = cartServiceImpl.deleteFromCart(book,request,token);
             return new ResponseEntity(deletedCartItem, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);

@@ -13,6 +13,6 @@ import java.util.List;
 public interface CartRepository extends CrudRepository<Cart, Integer> {
     List<BooksInCart> getBookIDByUsers(Users users);
     List<Cart> findAllByUsers(Users user);
-
+    Cart findCartByBookIDAndUsers(Integer bookId,Users users);
     void deleteCartByUsers(Users user);
 }
