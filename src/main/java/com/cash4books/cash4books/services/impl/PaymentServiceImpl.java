@@ -1,8 +1,8 @@
 package com.cash4books.cash4books.services.impl;
 
 import com.cash4books.cash4books.controller.PaymentController;
-import com.cash4books.cash4books.dto.orders.BooksOrderDto;
 import com.cash4books.cash4books.entity.Book;
+import com.cash4books.cash4books.entity.OrderDetails;
 import com.cash4books.cash4books.entity.Orders;
 import com.cash4books.cash4books.entity.Users;
 import com.cash4books.cash4books.repository.*;
@@ -20,6 +20,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -42,6 +43,9 @@ public class PaymentServiceImpl {
     @Autowired
     OrderRepository orderRepository;
 
+    @Autowired
+    OrderDetailsRepository orderDetailsRepository;
+
     Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
   public List<Integer> getBooksInCart(Users user) throws Exception {
@@ -62,39 +66,44 @@ public class PaymentServiceImpl {
       return availableBooks;
   }
 
-  public Orders createOrder(List<Book> orderedBooks, Users buyer, String paymentType) throws JsonProcessingException {
+  public Orders createOrder(List<Book> orderedBooks, String buyer, String paymentType) throws JsonProcessingException {
       Orders orders = new Orders();
       ObjectMapper objectMapper = JsonUtil.getObjectMapper();
-      orders.setUsers(buyer);
+      orders.setBuyerID(buyer);
       long d = System.currentTimeMillis();
       Date date = new Date(d);
       orders.setOrderDate(date);
-      List<BooksOrderDto> bookList = createOderedBooksDTO(orderedBooks);
+
       double totalPrice = 0.0;
-      for(BooksOrderDto booksOrderDto : bookList){
-          totalPrice += booksOrderDto.getPrice();
+      for(Book b : orderedBooks){
+          totalPrice += b.getPrice();
       }
+      orders.setBuyerID(buyer);
       orders.setTotal(totalPrice);
       orders.setPaymentType(paymentType);
-      String booksJson = objectMapper.writeValueAsString(bookList);
-      orders.setBooksBought(booksJson);
-      orders = orderRepository.save(orders);
-
       return orders;
   }
 
-  public List<BooksOrderDto> createOderedBooksDTO(List<Book> orderedBooks){
-      List<BooksOrderDto> bookList = orderedBooks.stream()
-              .map(this::convertToDto)
+  public List<OrderDetails> saveOrderDetails(List<Book> orderedBooks, Integer orderID, String buyer){
+      List<OrderDetails> bookList = createOrderDetails(orderedBooks,orderID, buyer);
+      Iterable<OrderDetails> temp = orderDetailsRepository.saveAll(bookList);
+      return StreamSupport.stream(temp.spliterator(), false).collect(Collectors.toList());
+  }
+
+  public List<OrderDetails> createOrderDetails(List<Book> orderedBooks, Integer orderID, String buyer){
+      List<OrderDetails> bookList = orderedBooks.stream()
+              .map(book -> convertToOrderDetails(book,orderID,buyer))
               .collect(Collectors.toList());
       return bookList;
 
   }
 
-  public BooksOrderDto convertToDto(Book book) {
-        BooksOrderDto booksOrderDto = modelMapper.map(book, BooksOrderDto.class);
-        booksOrderDto.setSellerID(book.getUsers().getEmail());
-        return booksOrderDto;
+  public OrderDetails convertToOrderDetails(Book book, Integer orderID, String buyer) {
+        OrderDetails orderDetails = modelMapper.map(book, OrderDetails.class);
+        orderDetails.setOrderID(orderID);
+        orderDetails.setBuyer(buyer);
+        orderDetails.setSeller(book.getEmail());
+        return orderDetails;
     }
 
     public String getBooksJson(List<Book> books)  {

@@ -1,16 +1,20 @@
 package com.cash4books.cash4books.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
 
 @Entity
-@Table(name = "book")
-public class Book {
+@Table(name = "order_details")
+public class OrderDetails {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    Integer uid;
 
-    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
+    Integer orderID;
+
+    String buyer;
+
+    String seller;
+
     Integer bookID;
 
     String isbn;
@@ -23,19 +27,33 @@ public class Book {
 
     String category;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Users users;
-
-
-    @Column(name="user_id", updatable=false, insertable=false)
-    private String email;
-
     @Column(name = "image", length = 5000000)
     @Lob
     private byte[] image;
+
+    public Integer getUid() {
+        return uid;
+    }
+
+    public void setUid(Integer uid) {
+        this.uid = uid;
+    }
+
+    public String getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(String buyer) {
+        this.buyer = buyer;
+    }
+
+    public String getSeller() {
+        return seller;
+    }
+
+    public void setSeller(String seller) {
+        this.seller = seller;
+    }
 
     public Integer getBookID() {
         return bookID;
@@ -43,6 +61,14 @@ public class Book {
 
     public void setBookID(Integer bookID) {
         this.bookID = bookID;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     public String getTitle() {
@@ -77,35 +103,19 @@ public class Book {
         this.category = category;
     }
 
-    public Users getUsers() {
-        return users;
-    }
-
-    public void setUsers(Users users) {
-        this.users = users;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public byte[] getImage() {
         return image;
     }
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public Integer getOrderID() {
+        return orderID;
+    }
+
+    public void setOrderID(Integer orderID) {
+        this.orderID = orderID;
     }
 }

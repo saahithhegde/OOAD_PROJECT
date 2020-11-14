@@ -1,75 +1,28 @@
 package com.cash4books.cash4books.dto.orders;
 
+import com.cash4books.cash4books.entity.OrderDetails;
+import com.cash4books.cash4books.entity.Orders;
+
+import java.util.List;
+
 public class BooksOrderDto {
 
-    Integer bookID;
+   Orders orders;
+   List<OrderDetails> orderDetails;
 
-    String isbn;
-
-    String title;
-
-    String author;
-
-    double price;
-
-    String category;
-
-    String sellerID;
-
-    public Integer getBookID() {
-        return bookID;
+    public Orders getOrders() {
+        return orders;
     }
 
-    public void setBookID(Integer bookID) {
-        this.bookID = bookID;
+    public void setOrders(Orders orders) {
+        this.orders = orders;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public List<OrderDetails> getOrderDetails() {
+        return orderDetails;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setOrderDetails(List<OrderDetails> orderDetails) {
+        this.orderDetails = orderDetails;
     }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getSellerID() {
-        return sellerID;
-    }
-
-    public void setSellerID(String sellerID) {
-        this.sellerID = sellerID;
-    }
-
 }

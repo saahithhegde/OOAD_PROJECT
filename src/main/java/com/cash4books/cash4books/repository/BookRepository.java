@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface BookRepository extends CrudRepository<Book, Integer> {
     Book findByBookID(Integer bookID);
-    List<Book> findAllByEmailID(String emailID);
+    List<Book> findAllByEmail(String email);
     List<Book> findAllByUsers(Users user);
     List<Book> findByTitleContaining(String title);
     List<Book> findAllByAuthor(String author);

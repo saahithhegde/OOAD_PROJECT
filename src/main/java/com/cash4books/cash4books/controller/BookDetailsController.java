@@ -4,15 +4,21 @@ import com.cash4books.cash4books.dto.book.BookDto;
 import com.cash4books.cash4books.dto.book.BookDtoQuery;
 import com.cash4books.cash4books.services.impl.BookServiceImpl;
 import com.cash4books.cash4books.entity.Book;
-import com.cash4books.cash4books.services.impl.UserServiceImpl;
+import com.cash4books.cash4books.utils.JsonUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartResolver;
 
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -22,13 +28,32 @@ public class BookDetailsController {
 
     Logger logger = LoggerFactory.getLogger(BookDetailsController.class);
 
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        return new MultipartConfigElement("");
+    }
+
+    @Bean
+    public MultipartResolver multipartResolver() {
+        org.springframework.web.multipart.commons.CommonsMultipartResolver multipartResolver = new org.springframework.web.multipart.commons.CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(1000000);
+        return multipartResolver;
+    }
+
     @Autowired
     BookServiceImpl bookServiceImpl;
 
-
-    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Book> addBook(@RequestBody Book book , HttpServletRequest request, @RequestHeader(name = "Token") String token){
+    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Book> addBook( @RequestParam(value = "file") MultipartFile file, @RequestParam(value = "book") String bookJson , HttpServletRequest request, @RequestHeader(name = "Token") String token){
+        ObjectMapper objectMapper = JsonUtil.getObjectMapper();
+        Book book = null;
         try {
+            book = objectMapper.readValue(bookJson,Book.class);
+        } catch (JsonProcessingException e) {
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+        try {
+            book.setImage(file.getBytes());
             book = bookServiceImpl.addBook(book,request,token);
         } catch (Exception e) {
             logger.error("Failed to add book, user is not logged in");
