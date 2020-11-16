@@ -6,14 +6,16 @@ public class BookDtoQuery {
     private Long count;
     private String author;
     private String category;
+    private String description;
 
 
-    public BookDtoQuery(String isbn, String title, String author, String category,Long count) {
+    public BookDtoQuery(String isbn, String title, String author, String category, String description, Long count) {
         this.isbn = isbn;
         this.title = title;
         this.count = count;
         this.author = author;
         this.category = category;
+        this.description = description;
     }
 
     public String getIsbn() {
@@ -54,5 +56,13 @@ public class BookDtoQuery {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

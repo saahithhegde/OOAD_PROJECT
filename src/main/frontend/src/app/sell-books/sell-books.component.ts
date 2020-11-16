@@ -55,7 +55,26 @@ export class SellBooksComponent implements OnInit {
     });
   }
 
-    deleteBook(){
+  deleteBook(deleteListing:BookDto){
+    this.spinnerService.show();
+    this.bookServiceService.deleteUserListing(deleteListing).subscribe(
+      (data) => {
+        if (data.isbn) {
+          setTimeout(() => this.spinnerService.hide(), 3000);
+          this.notificationService.showWarning("Deleted Listing", "Deleted");
+          this.removeListing(data);
+        }
+      }, (err) => {
+        setTimeout(() => this.spinnerService.hide(), 3000);
+        this.notificationService.showError(JSON.stringify(err.error), "error");
+      });
 
-    }
+
+  }
+  removeListing(book:BookDto){
+    this.userBooksArray.forEach( (item, index) => {
+      if(item.bookID === book.bookID) this.userBooksArray.splice(index,1);
+    });
+  }
+
 }

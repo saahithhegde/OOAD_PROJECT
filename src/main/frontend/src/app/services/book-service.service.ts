@@ -24,7 +24,7 @@ export class BookServiceService {
 
   deleteUserListing(deleteBook:BookDto):Observable<BookDto>{
     var header=this.commonServices.getHeaders();
-    return this.httpClient.post<BookDto>(AppConstants.DELETEUSERBOOK,{headers:header});
+    return this.httpClient.post<BookDto>(AppConstants.DELETEUSERBOOK,deleteBook,{headers:header});
   }
 
   getDashBoardDetails():Observable<Array<BookDto>>{
