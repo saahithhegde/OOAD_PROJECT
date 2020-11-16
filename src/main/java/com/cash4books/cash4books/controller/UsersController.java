@@ -1,8 +1,11 @@
 package com.cash4books.cash4books.controller;
 
+import com.cash4books.cash4books.dto.orders.BooksOrderDto;
 import com.cash4books.cash4books.dto.users.ForgotPasswordDto;
 import com.cash4books.cash4books.dto.users.UsersLoginDto;
 import com.cash4books.cash4books.entity.Users;
+import com.cash4books.cash4books.exception.UserNotLoggedInException;
+import com.cash4books.cash4books.services.impl.BookServiceImpl;
 import com.cash4books.cash4books.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +26,9 @@ public class UsersController {
 
     @Autowired
     UserServiceImpl userService;
+
+    @Autowired
+    BookServiceImpl bookService;
 
     @PostMapping(value = {"/createUser"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Users> createUser(@RequestBody Users newUserDetails) {
@@ -85,6 +92,30 @@ public class UsersController {
 
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = {"/sellHistory"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<BooksOrderDto>> getSellHistory(HttpServletRequest request, @RequestHeader(name = "Token") String token) {
+        try {
+            List<BooksOrderDto> sellerHistory = bookService.getSellHistory(request,token);
+            return new ResponseEntity(sellerHistory,HttpStatus.OK);
+        } catch (UserNotLoggedInException e) {
+            return new ResponseEntity("User not logged in",HttpStatus.BAD_REQUEST);
+        } catch (UnsupportedEncodingException e) {
+            return new ResponseEntity("Failed to get seller history",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = {"/buyHistory"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<BooksOrderDto>> getBuyHistory(HttpServletRequest request, @RequestHeader(name = "Token") String token) {
+        try {
+            List<BooksOrderDto> buyerHistory = bookService.getBuyHistory(request,token);
+            return new ResponseEntity(buyerHistory,HttpStatus.OK);
+        } catch (UserNotLoggedInException e) {
+            return new ResponseEntity("User not logged in",HttpStatus.BAD_REQUEST);
+        } catch (UnsupportedEncodingException e) {
+            return new ResponseEntity("Failed to get seller history",HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

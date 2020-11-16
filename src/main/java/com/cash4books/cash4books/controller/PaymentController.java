@@ -1,6 +1,8 @@
 package com.cash4books.cash4books.controller;
 
+import com.cash4books.cash4books.dto.orders.BooksOrderDto;
 import com.cash4books.cash4books.entity.Book;
+import com.cash4books.cash4books.entity.OrderDetails;
 import com.cash4books.cash4books.entity.Orders;
 import com.cash4books.cash4books.entity.Users;
 import com.cash4books.cash4books.services.impl.CartServiceImpl;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/payment")
+@Transactional
 public class PaymentController {
 
     @Autowired
@@ -37,8 +41,8 @@ public class PaymentController {
     Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
     @GetMapping(value="/submit" ,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Orders> submitPayment(HttpServletRequest request, @RequestHeader(name = "Token") String token, String paymentType){
-        //TODO: Handle transaction, and delete books from the available books after buy
+    public ResponseEntity<BooksOrderDto> submitPayment(HttpServletRequest request, @RequestHeader(name = "Token") String token, @RequestHeader(name = "paymentType") String paymentType){
+        BooksOrderDto booksOrderDto = null;
         Users buyer;
         try {
              buyer = userServiceImpl.getUserProfile(request,token);
@@ -59,16 +63,20 @@ public class PaymentController {
         }
         Orders orders;
         try {
-            orders = paymentServiceImpl.createOrder(availableBooks,buyer,paymentType);
+            orders = paymentServiceImpl.createOrder(availableBooks,buyer.getEmail(),paymentType);
         } catch (JsonProcessingException e) {
             return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
         try {
             orders = paymentServiceImpl.executeTransaction(orders,availableBooks,buyer);
+            List<OrderDetails> orderDetailsList = paymentServiceImpl.saveOrderDetails(availableBooks, orders.getOrderID(), buyer.getEmail());
+            booksOrderDto = new BooksOrderDto();
+            booksOrderDto.setOrders(orders);
+            booksOrderDto.setOrderDetails(orderDetailsList);
         } catch (Exception e) {
             return new ResponseEntity("Failed to execute transaction, Please try again later",HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(orders,HttpStatus.ACCEPTED);
+        return new ResponseEntity(booksOrderDto,HttpStatus.ACCEPTED);
     }
 
 }
