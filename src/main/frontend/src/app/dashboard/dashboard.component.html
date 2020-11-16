@@ -1,21 +1,33 @@
 <div class="card">
   <div class="card-body d-flex">
-    <div class="form-inline d-inline-flex mr-auto">
-      <label>Category
-      <select class="ml-2 form-control">
-        <option>Clothes</option>
-        <option>Electronics</option>
-        <option>Home Items</option>
-        <option>Foods</option>
-      </select>
-    </label></div>
-    <div class="btn-group" role="group" aria-label="Filter by">
-      <button type="button" class="btn btn-outline-primary active">Featured</button>
-      <button type="button" class="btn btn-outline-primary">New Items</button>
-      <button type="button" class="btn btn-outline-primary">On Sale</button>
+    <div class="md-form mt-0">
+      <label style="display: inline" >Search:</label>
+      <input class="form-control" type="text" placeholder="Search" aria-label="Search"  [(ngModel)]="searchField" (ngModelChange)="search($event)">
     </div>
+  <span class="form-group col-md-3" style="display: inline">
+    <label style="display: inline" >Category:</label>
+    <select style="display: inline" class="form-control" [(ngModel)]="searchCategory" (ngModelChange)="searchByCategory($event)">
+          <option  value="none">None</option>
+          <option  value="autobiography">Autobigraphy</option>
+          <option  value="adventure">Adventure</option>
+          <option  value="romance">Romance</option>
+          <option  value="mystery">Mystery</option>
+          <option  value="horror">Horror</option>
+          <option  value="thriller">Thriller</option>
+          <option  value="fiction">Fiction</option>
+          <option  value="memoir">Memoir</option>
+          <option  value="art">Art</option>
+          <option  value="motivational">Motivational</option>
+          <option  value="health">Health</option>
+          <option  value="history">History</option>
+          <option  value="educational">Educational</option>
+          <option  value="travel">Travel</option>
+          <option  value="humour">Humour</option>
+          <option  value="child">Children's</option>
+    </select>
+  </span>
   </div>
-  </div> <!-- card.// -->
+</div> <!-- card.// -->
 
 
   <div *ngIf="dashBoardBookArray?.length>0">

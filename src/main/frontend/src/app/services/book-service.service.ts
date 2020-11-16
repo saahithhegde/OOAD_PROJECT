@@ -35,4 +35,12 @@ export class BookServiceService {
     return this.httpClient.get<Array<BookDto>>(`/api/book/isbn/${isbn}`);
   }
 
+  searchBooks(keyword:string):Observable<Array<BookDto>>{
+    return this.httpClient.get<Array<BookDto>>(`/api/book/search/${keyword}`);
+  }
+
+  searchBooksByCategory(category:string):Observable<Array<BookDto>>{
+    return this.httpClient.get<Array<BookDto>>(`/api/book/category/${category}`);
+  }
+
 }

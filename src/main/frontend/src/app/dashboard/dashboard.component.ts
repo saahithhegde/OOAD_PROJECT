@@ -12,6 +12,9 @@ import {Router} from "@angular/router";
 })
 export class DashboardComponent implements OnInit {
   dashBoardBookArray:Array<BookDto>
+  defaultBookArray:Array<BookDto>
+  searchField: string;
+  searchCategory:string;
 
   constructor(private bookServiceService:BookServiceService,private spinnerService:Ng4LoadingSpinnerService,private notificationService:NotificationService,private router:Router) { }
 
@@ -24,6 +27,7 @@ export class DashboardComponent implements OnInit {
     this.bookServiceService.getDashBoardDetails().subscribe(
       (data)=>{
         this.dashBoardBookArray=data;
+        this.defaultBookArray=data;
         setTimeout(()=>this.spinnerService.hide(),3000);
       },
       (err)=>{
@@ -40,4 +44,46 @@ export class DashboardComponent implements OnInit {
     }
 
 
+    searchByCategory($event:any){
+    if(this.searchCategory=="none"){
+      this.dashBoardBookArray=this.defaultBookArray;
+    }
+    else{
+      this.spinnerService.show();
+      this.bookServiceService.searchBooksByCategory(this.searchCategory).subscribe(
+        (data)=>{
+          if(data.length==0){
+            this.notificationService.showError("No Book Found","Not Found");
+          }
+          this.dashBoardBookArray=data;
+          this.spinnerService.hide();
+        },
+        (err) => {
+          this.notificationService.showError(JSON.stringify(err.error),"error");
+          this.spinnerService.hide();
+        });
+    }
+  }
+
+  search($event: any) {
+    if(this.searchField==""){
+      this.dashBoardBookArray=this.defaultBookArray;
+    }
+    else{
+      this.spinnerService.show();
+      this.bookServiceService.searchBooks(this.searchField).subscribe(
+        (data)=>{
+          if(data.length==0){
+            this.notificationService.showError("No Book Found","Not Found");
+          }
+          this.dashBoardBookArray=data;
+          this.spinnerService.hide();
+          },
+        (err) => {
+          this.notificationService.showError(JSON.stringify(err.error),"error");
+          this.spinnerService.hide();
+        });
+    }
+
+  }
 }
