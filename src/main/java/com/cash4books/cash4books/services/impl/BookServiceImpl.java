@@ -10,6 +10,10 @@ import com.cash4books.cash4books.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import com.cash4books.cash4books.controller.BookDetailsController;
+import com.cash4books.cash4books.entity.Cart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -24,6 +28,11 @@ private UserRepository userRepository;
 
 @Autowired
 SessionServiceImpl sessionService;
+
+    @Autowired
+    UserServiceImpl userService;
+
+    Logger logger = LoggerFactory.getLogger(BookDetailsController.class);
 
     public Book addBook(Book book, HttpServletRequest request, String token ) throws Exception {
         //TODO custom exception
@@ -92,5 +101,18 @@ SessionServiceImpl sessionService;
 
     public Book getUserBook(Integer bookId,Users users){
         return bookRepository.findBookByBookIDAndUsers(bookId,users);
+    }
+
+    public Book deleteListing(Book book, HttpServletRequest request, String token ) throws Exception {
+        String email = sessionService.getSessionValidation(request,token);
+        Integer bookId = book.getBookID();
+        if(email==null ||  email.equals("")) {
+            throw new UserNotLoggedInException();
+        }
+        Book deletedBook = bookRepository.findByBookID(bookId);
+        bookRepository.delete(deletedBook);
+        logger.info("Successfully deleted book from cart:");
+        return deletedBook;
+
     }
 }

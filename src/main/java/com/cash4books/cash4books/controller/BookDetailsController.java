@@ -58,6 +58,15 @@ public class BookDetailsController {
         }
     }
 
+    @PostMapping(path = "/deleteListing",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Book> deleteListing(@RequestBody Book book , HttpServletRequest request, @RequestHeader(name = "Token") String token){
+        try{
+            Book deletedBook = bookServiceImpl.deleteListing(book,request,token);
+            return new ResponseEntity(deletedBook, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+    }
 
     @GetMapping(path = "/isbn/{isbn}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Book>> searchIsbn(@PathVariable("isbn") String isbn){

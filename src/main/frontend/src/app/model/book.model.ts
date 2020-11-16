@@ -6,4 +6,5 @@ export class BookDto{
    price:Number;
    category:string;
    count:Number;
+   description:string;
 }

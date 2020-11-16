@@ -23,6 +23,8 @@ public class Book {
 
     String category;
 
+    String description;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -94,5 +96,13 @@ public class Book {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
