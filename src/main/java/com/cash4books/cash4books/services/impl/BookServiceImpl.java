@@ -1,6 +1,5 @@
 package com.cash4books.cash4books.services.impl;
 
-import com.cash4books.cash4books.dto.book.BookDto;
 import com.cash4books.cash4books.dto.book.BookDtoQuery;
 import com.cash4books.cash4books.entity.Book;
 import com.cash4books.cash4books.entity.Users;
@@ -8,7 +7,6 @@ import com.cash4books.cash4books.exception.UserNotLoggedInException;
 import com.cash4books.cash4books.repository.BookRepository;
 import com.cash4books.cash4books.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +30,7 @@ SessionServiceImpl sessionService;
                 throw new Exception("User not logged in");
             Users user =  userRepository.findUserByEmail(email);
             book.setUsers(user);
+            book.setEmail(email);
             book = bookRepository.save(book);
             return book;
 
@@ -77,7 +76,7 @@ SessionServiceImpl sessionService;
 
     public List<Book> getBooksBySeller(String id) {
         //Users user = userRepository.findUserByEmail(id);
-        List<Book> books = bookRepository.findAllByEmailID(id);
+        List<Book> books = bookRepository.findAllByEmail(id);
         return books;
     }
 

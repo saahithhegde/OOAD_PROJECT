@@ -11,14 +11,20 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +48,9 @@ public class BookControllerTest {
     @MockBean
     SessionServiceImpl sessionService;
 
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
 
 
     @Test
@@ -54,35 +63,21 @@ public class BookControllerTest {
         String email = "test";
         when(sessionService.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(email);
         when(bookService.addBook(Mockito.any(Book.class),Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(book);
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/book/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"title\":\"book_5\", \"author\" : \"abc\",\"price\" : 2.5,\"category\" : \"SE\"}")
-                .header("email","test")
-                .header("Token","dummy")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.title").exists())
-                .andExpect(jsonPath("$.author").exists())
-                .andExpect(jsonPath("$.price").exists())
-                .andExpect(jsonPath("$.category").exists())
-                .andExpect(jsonPath("$.title").value("book_5"))
-                .andExpect(jsonPath("$.author").value("abc"))
-                .andExpect(jsonPath("$.price").value(2.5))
-                .andExpect(jsonPath("$.category").value("SE"))
-                .andDo(print());
+        MockMultipartFile firstFile = new MockMultipartFile("file", "filename.txt", "text/plain", "some test".getBytes());
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/book/add")
+                .file(firstFile).header("Token","dummy")
+                .param("book", "{\"title\":\"book_5\", \"author\" : \"abc\",\"price\" : 2.5,\"category\" : \"SE\"}"))
+                .andExpect(status().isAccepted());
     }
     @Test(expected = Exception.class)
     public void addBookExceptionTest() throws Exception {
         String email = "";
         when(sessionService.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(email);
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/book/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"title\":\"book_5\", \"author\" : \"abc\",\"price\" : 2.5,\"category\" : \"SE\"}")
-                .header("email","test")
-                .header("Token","dummy")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andDo(print());
+        MockMultipartFile firstFile = new MockMultipartFile("file", "filename.txt", "text/plain", "some test".getBytes());
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/book/add")
+                .file(firstFile).header("Token","dummy")
+                .param("book", "{\"title\":\"book_5\", \"author\" : \"abc\",\"price\" : 2.5,\"category\" : \"SE\"}"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

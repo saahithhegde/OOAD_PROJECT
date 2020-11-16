@@ -5,7 +5,6 @@ import com.cash4books.cash4books.entity.Users;
 import com.cash4books.cash4books.repository.BookRepository;
 import com.cash4books.cash4books.repository.UserRepository;
 import com.cash4books.cash4books.services.SessionService;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -139,7 +138,7 @@ public class BookServiceImplTest {
         List<Book> list = new ArrayList<>();
         list.add(expectedBook);
         when(userRepository.findUserByEmail(Mockito.anyString())).thenReturn(users);
-        when(bookRepository.findAllByEmailID(Mockito.anyString())).thenReturn(list);
+        when(bookRepository.findAllByEmail(Mockito.anyString())).thenReturn(list);
         List<Book> result = bookService.getBooksBySeller( "test");
         assertEquals(1,result.size());
     }
