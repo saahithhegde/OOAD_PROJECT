@@ -31,17 +31,13 @@ public class Book {
     @JsonIgnore
     private Users users;
 
-    public String getEmailID() {
-        return emailID;
-    }
-
-    public void setEmailID(String emailID) {
-        this.emailID = emailID;
-    }
 
     @Column(name="user_id", updatable=false, insertable=false)
-    private String emailID;
+    private String email;
 
+    @Column(name = "image", length = 5000000)
+    @Lob
+    private byte[] image;
 
     public Integer getBookID() {
         return bookID;
@@ -98,11 +94,19 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public String getDescription() {
-        return description;
+    public String getEmail() {
+        return email;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }
