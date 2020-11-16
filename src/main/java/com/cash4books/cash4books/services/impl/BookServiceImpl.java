@@ -56,6 +56,14 @@ SessionServiceImpl sessionService;
         return books;
     }
 
+    public List<Book> searchByAny(String keyword){
+        if(keyword!=null){
+            List<Book> books = bookRepository.search(keyword);
+            return books;
+        }
+        return (List<Book>) bookRepository.findAll();
+    }
+
     public Book getBookById(Integer Id){
         Book book=bookRepository.findByBookID(Id);
         return book;

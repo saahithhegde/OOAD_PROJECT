@@ -27,5 +27,8 @@ public interface BookRepository extends CrudRepository<Book, Integer> {
     @Query("SELECT new com.cash4books.cash4books.dto.book.BookDtoQuery(b.isbn ,b.title,b.author,b.category,b.description,COUNT(b)) FROM Book b GROUP BY b.isbn")
     List<BookDtoQuery> fetchAllDisticntIsbn();
 
+    @Query("SELECT b FROM Book b WHERE CONCAT(b.isbn, b.title, b.author) LIKE %?1%")
+    List<Book> search(String keyword);
+
 
 }

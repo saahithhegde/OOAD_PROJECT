@@ -5,6 +5,7 @@ import com.cash4books.cash4books.dto.book.BookDtoQuery;
 import com.cash4books.cash4books.services.impl.BookServiceImpl;
 import com.cash4books.cash4books.entity.Book;
 import com.cash4books.cash4books.services.impl.UserServiceImpl;
+import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,7 +40,7 @@ public class BookDetailsController {
 
     }
 
-    @GetMapping(path = "/getDistinctIsbn",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = {"/getDistinctIsbn","search"},produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<BookDtoQuery>>getDistinctIsbn(){
         List<BookDtoQuery> books=bookServiceImpl.fetchAllDistinctIsbn();
         return new ResponseEntity<>(books,HttpStatus.OK);
@@ -96,4 +97,11 @@ public class BookDetailsController {
         List<Book> books = bookServiceImpl.filterByCategory(category);
         return new ResponseEntity<>(books,HttpStatus.OK);
     }
+
+    @GetMapping(path = "/search/{keyword}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Book>> searchByKeyword(@PathVariable(value = "keyword") String keyword){
+        List<Book> books = bookServiceImpl.searchByAny(keyword);
+        return new ResponseEntity<>(books,HttpStatus.OK);
+    }
+
 }
