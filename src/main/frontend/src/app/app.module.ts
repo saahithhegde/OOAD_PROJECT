@@ -23,6 +23,7 @@ import { BookDetailsComponent } from './book-details/book-details.component';
 import { SellBooksComponent } from './sell-books/sell-books.component';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { ToastrModule } from 'ngx-toastr';
+import { OrdersComponent } from './orders/orders.component';
 
 
 //material ui
@@ -41,7 +42,8 @@ import { ToastrModule } from 'ngx-toastr';
     ForgotPasswordComponent,
     LandingHomepageComponent,
     BookDetailsComponent,
-    SellBooksComponent
+    SellBooksComponent,
+    OrdersComponent
   ],
   imports: [
     BrowserModule,
