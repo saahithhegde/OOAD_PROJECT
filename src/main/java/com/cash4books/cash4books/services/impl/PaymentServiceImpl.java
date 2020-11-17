@@ -66,9 +66,8 @@ public class PaymentServiceImpl {
       return availableBooks;
   }
 
-  public Orders createOrder(List<Book> orderedBooks, String buyer, String paymentType) throws JsonProcessingException {
+  public Orders createOrder(List<Book> orderedBooks, String buyer, String paymentType) {
       Orders orders = new Orders();
-      ObjectMapper objectMapper = JsonUtil.getObjectMapper();
       orders.setBuyerID(buyer);
       long d = System.currentTimeMillis();
       Date date = new Date(d);
@@ -125,6 +124,5 @@ public class PaymentServiceImpl {
         else throw new Exception("Failed to execute transaction");
         return orders;
     }
-
 
 }

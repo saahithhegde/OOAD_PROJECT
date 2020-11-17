@@ -2,8 +2,6 @@ package com.cash4books.cash4books.controller;
 
 import com.cash4books.cash4books.dto.cart.CartDTO;
 import com.cash4books.cash4books.entity.Book;
-import com.cash4books.cash4books.entity.Cart;
-import com.cash4books.cash4books.services.impl.BookServiceImpl;
 import com.cash4books.cash4books.services.impl.CartServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

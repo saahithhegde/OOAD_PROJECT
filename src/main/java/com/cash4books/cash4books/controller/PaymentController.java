@@ -29,8 +29,6 @@ import java.util.List;
 @Transactional
 public class PaymentController {
 
-    @Autowired
-    CartServiceImpl cartServiceImpl;
 
     @Autowired
     PaymentServiceImpl paymentServiceImpl;
@@ -62,11 +60,8 @@ public class PaymentController {
             return new ResponseEntity("Few books in cart are not available. Available books are:"+paymentServiceImpl.getBooksJson(availableBooks),HttpStatus.BAD_REQUEST);
         }
         Orders orders;
-        try {
-            orders = paymentServiceImpl.createOrder(availableBooks,buyer.getEmail(),paymentType);
-        } catch (JsonProcessingException e) {
-            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        orders = paymentServiceImpl.createOrder(availableBooks,buyer.getEmail(),paymentType);
+
         try {
             orders = paymentServiceImpl.executeTransaction(orders,availableBooks,buyer);
             List<OrderDetails> orderDetailsList = paymentServiceImpl.saveOrderDetails(availableBooks, orders.getOrderID(), buyer.getEmail());
