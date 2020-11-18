@@ -12,7 +12,12 @@ import com.cash4books.cash4books.repository.OrderDetailsRepository;
 import com.cash4books.cash4books.repository.OrderRepository;
 import com.cash4books.cash4books.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import com.cash4books.cash4books.controller.BookDetailsController;
+import com.cash4books.cash4books.entity.Cart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -36,6 +41,11 @@ OrderDetailsRepository orderDetailsRepository;
 @Autowired
 OrderRepository orderRepository;
 
+@Autowired
+UserServiceImpl userService;
+
+Logger logger = LoggerFactory.getLogger(BookDetailsController.class);
+
     public Book addBook(Book book, HttpServletRequest request, String token ) throws Exception {
         //TODO custom exception
         String email = sessionService.getSessionValidation(request,token);
@@ -43,7 +53,6 @@ OrderRepository orderRepository;
                 throw new Exception("User not logged in");
             Users user =  userRepository.findUserByEmail(email);
             book.setUsers(user);
-            book.setEmail(email);
             book = bookRepository.save(book);
             return book;
 
@@ -57,6 +66,14 @@ OrderRepository orderRepository;
     public List<BookDtoQuery> fetchAllDistinctIsbn(){
         List<BookDtoQuery>books=bookRepository.fetchAllDisticntIsbn();
         return books;
+    }
+
+    public List<Book> searchByAny(String keyword){
+        if(keyword!=null){
+            List<Book> books = bookRepository.search(keyword);
+            return books;
+        }
+        return (List<Book>) bookRepository.findAll();
     }
 
     public Book getBookById(Integer Id){
@@ -133,5 +150,18 @@ OrderRepository orderRepository;
             buyerHistory.add(booksOrderDto);
         }
         return buyerHistory;
+    }
+
+    public Book deleteListing(Book book, HttpServletRequest request, String token ) throws Exception {
+        String email = sessionService.getSessionValidation(request,token);
+        Integer bookId = book.getBookID();
+        if(email==null ||  email.equals("")) {
+            throw new UserNotLoggedInException();
+        }
+        Book deletedBook = bookRepository.findByBookID(bookId);
+        bookRepository.delete(deletedBook);
+        logger.info("Successfully deleted book from cart:");
+        return deletedBook;
+
     }
 }

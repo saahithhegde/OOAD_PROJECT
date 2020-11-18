@@ -12,8 +12,14 @@ export class AuthenticationService {
 
 
   isUserLoggedIn() {
-    let user = sessionStorage.getItem('token')
-    console.log(!(user === null))
+    let user = sessionStorage.getItem('token');
+    let date= sessionStorage.getItem('date-time');
+    let nowDate = new Date(date);
+    let minutes = Math.floor((new Date().getTime() - nowDate.getTime()) / 1000 / 60  );
+    if(minutes>10){
+      this.logOut();
+      return false;
+    }
     return !(user === null)
   }
 

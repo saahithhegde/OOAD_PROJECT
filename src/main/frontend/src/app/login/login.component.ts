@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
         (data)=>{
           if(data.token){
               sessionStorage.setItem('token', data.token);
+              sessionStorage.setItem('date-time',new Date().toLocaleString());
               setTimeout(()=>this.spinnerService.hide(),3000)
               this.router.navigate(['']);
              }

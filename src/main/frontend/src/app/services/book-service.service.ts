@@ -24,7 +24,7 @@ export class BookServiceService {
 
   deleteUserListing(deleteBook:BookDto):Observable<BookDto>{
     var header=this.commonServices.getHeaders();
-    return this.httpClient.post<BookDto>(AppConstants.DELETEUSERBOOK,{headers:header});
+    return this.httpClient.post<BookDto>(AppConstants.DELETEUSERBOOK,deleteBook,{headers:header});
   }
 
   getDashBoardDetails():Observable<Array<BookDto>>{
@@ -33,6 +33,14 @@ export class BookServiceService {
 
   getBookByIsbn(isbn:string):Observable<Array<BookDto>>{
     return this.httpClient.get<Array<BookDto>>(`/api/book/isbn/${isbn}`);
+  }
+
+  searchBooks(keyword:string):Observable<Array<BookDto>>{
+    return this.httpClient.get<Array<BookDto>>(`/api/book/search/${keyword}`);
+  }
+
+  searchBooksByCategory(category:string):Observable<Array<BookDto>>{
+    return this.httpClient.get<Array<BookDto>>(`/api/book/category/${category}`);
   }
 
 }

@@ -4,6 +4,7 @@ import com.cash4books.cash4books.dto.book.BookDto;
 import com.cash4books.cash4books.dto.book.BookDtoQuery;
 import com.cash4books.cash4books.services.impl.BookServiceImpl;
 import com.cash4books.cash4books.entity.Book;
+import com.cash4books.cash4books.services.impl.UserServiceImpl;
 import com.cash4books.cash4books.utils.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,7 +65,7 @@ public class BookDetailsController {
 
     }
 
-    @GetMapping(path = "/getDistinctIsbn",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = {"/getDistinctIsbn","search"},produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<BookDtoQuery>>getDistinctIsbn(){
         List<BookDtoQuery> books=bookServiceImpl.fetchAllDistinctIsbn();
         return new ResponseEntity<>(books,HttpStatus.OK);
@@ -82,6 +83,15 @@ public class BookDetailsController {
         }
     }
 
+    @PostMapping(path = "/deleteListing",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Book> deleteListing(@RequestBody Book book , HttpServletRequest request, @RequestHeader(name = "Token") String token){
+        try{
+            Book deletedBook = bookServiceImpl.deleteListing(book,request,token);
+            return new ResponseEntity(deletedBook, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+    }
 
     @GetMapping(path = "/isbn/{isbn}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Book>> searchIsbn(@PathVariable("isbn") String isbn){
@@ -112,4 +122,11 @@ public class BookDetailsController {
         List<Book> books = bookServiceImpl.filterByCategory(category);
         return new ResponseEntity<>(books,HttpStatus.OK);
     }
+
+    @GetMapping(path = "/search/{keyword}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Book>> searchByKeyword(@PathVariable(value = "keyword") String keyword){
+        List<Book> books = bookServiceImpl.searchByAny(keyword);
+        return new ResponseEntity<>(books,HttpStatus.OK);
+    }
+
 }

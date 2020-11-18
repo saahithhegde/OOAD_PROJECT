@@ -10,6 +10,14 @@
                 <div class="form-row">
 
                   <div class="form-group col-md-4">
+                    <label >Book ISBN</label>
+                    <input type="number" class="form-control"  placeholder="Enter ISBN" name="ISBN" [(ngModel)]="addBookDto.isbn" required #isbn="ngModel">
+                    <div [hidden]="isbn.valid" class="alert alert-danger">
+                      Book ISBN Required
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-4">
                     <label >Book Title</label>
                     <input type="text" class="form-control"  placeholder="Enter Title" name="title" [(ngModel)]="addBookDto.title" required #title="ngModel">
                     <div [hidden]="title.valid" class="alert alert-danger">
@@ -28,9 +36,22 @@
                     <div class="form-group col-md-4">
                       <label>Category</label>
                       <select  class="form-control" [(ngModel)]="addBookDto.category" ngModel required name="category" #category="ngModel">
-                        <option  value="pet">What Is Your Pet Name?</option>
-                        <option  value="car">What Is Your Car Name?</option>
-                        <option  value="sport">Which Sport Do You Like?</option>
+                        <option  value="autobiography">Autobigraphy</option>
+                        <option  value="adventure">Adventure</option>
+                        <option  value="romance">Romance</option>
+                        <option  value="mystery">Mystery</option>
+                        <option  value="horror">Horror</option>
+                        <option  value="thriller">Thriller</option>
+                        <option  value="fiction">Fiction</option>
+                        <option  value="memoir">Memoir</option>
+                        <option  value="art">Art</option>
+                        <option  value="motivational">Motivational</option>
+                        <option  value="health">Health</option>
+                        <option  value="history">History</option>
+                        <option  value="educational">Educational</option>
+                        <option  value="travel">Travel</option>
+                        <option  value="humour">Humour</option>
+                        <option  value="child">Children's</option>
                     </select>
                     <div [hidden]="category.valid" class="alert alert-danger">
                       Select Category
@@ -43,6 +64,14 @@
                     <div [hidden]="price.valid && price.value > 0" class="alert alert-danger">
                       Book Price Required and should be more than 0
                     </div>
+                  </div>
+
+                  <div class="form-group col-md-8">
+                    <label >Book Description/Condition</label>
+                    <textarea class="form-control"  placeholder="Enter the book description" name="description" [(ngModel)]="addBookDto.description" required #description="ngModel">
+                    <div [hidden]="description.valid" class="alert alert-danger">
+                      Book Description/Condition Required
+                    </div></textarea>
                   </div>
 
                   <div class="form-group col-md-8">

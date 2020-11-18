@@ -23,6 +23,8 @@ public class Book {
 
     String category;
 
+    String description;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -84,7 +86,6 @@ public class Book {
     public void setUsers(Users users) {
         this.users = users;
     }
-
     public String getIsbn() {
         return isbn;
     }
