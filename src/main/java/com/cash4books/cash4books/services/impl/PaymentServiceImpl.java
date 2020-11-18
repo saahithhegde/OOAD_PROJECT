@@ -29,13 +29,7 @@ public class PaymentServiceImpl {
     CartRepository cartRepository;
 
     @Autowired
-    SessionServiceImpl sessionService;
-
-    @Autowired
     BookRepository bookRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     ModelMapper modelMapper;

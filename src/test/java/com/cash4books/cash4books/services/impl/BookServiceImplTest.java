@@ -7,10 +7,7 @@ import com.cash4books.cash4books.entity.OrderDetails;
 import com.cash4books.cash4books.entity.Orders;
 import com.cash4books.cash4books.entity.Users;
 import com.cash4books.cash4books.exception.UserNotLoggedInException;
-import com.cash4books.cash4books.repository.BookRepository;
-import com.cash4books.cash4books.repository.OrderDetailsRepository;
-import com.cash4books.cash4books.repository.OrderRepository;
-import com.cash4books.cash4books.repository.UserRepository;
+import com.cash4books.cash4books.repository.*;
 import com.cash4books.cash4books.services.SessionService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,6 +30,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -61,6 +59,8 @@ public class BookServiceImplTest {
 
     @Mock
     SessionService sessionService;
+
+
 
     Book expectedBook;
     Users users;
@@ -220,5 +220,7 @@ public class BookServiceImplTest {
         List<Book> sellerBooks = bookService.getBooksOfSeller(httpServletRequest, "test");
         Assert.assertEquals(list.get(0).getBookID(),sellerBooks.get(0).getBookID());
     }
+
+
 
 }
