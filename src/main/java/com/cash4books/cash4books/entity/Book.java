@@ -23,7 +23,6 @@ public class Book {
 
     String category;
 
-
     String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -110,6 +109,7 @@ public class Book {
     public void setImage(byte[] image) {
         this.image = image;
     }
+
     public String getDescription() {
         return description;
     }
