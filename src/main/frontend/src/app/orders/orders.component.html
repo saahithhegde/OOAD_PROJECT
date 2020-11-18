@@ -26,6 +26,7 @@
                       <p class="title">{{ord?.bookID}}</p>
                       <div class="price mt-2">${{ord?.price}}</div>
                       <p class="title">{{ord?.seller}}</p>
+                      <a href="#" class="img-wrap"><img *ngIf="ord?.image"class="card-img-top" src="data:image/jpg;base64,{{ord.image}}" alt="Card image cap"></a>
                      </tr>
                   </td>
                 <td><button class="btn btn-success" (click)="generateInvoice(or.orders.orderID)">Get Invoice</button></td>
@@ -50,7 +51,6 @@
                     <td>{{ord?.buyer}}</td>
                     <td>{{or.orders.paymentType}}</td>
                     <td>${{or.orders.total}}</td>
-                    <a href="#" class="img-wrap"><img *ngIf="ord?.image"class="card-img-top" src="data:image/jpg;base64,{{ord.image}}" alt="Card image cap"></a>
                   <!-- <td *ngFor="let ord of or.orderDetails">
                     <tr>
                       <a class="title">{{ord.orderDetails?.title}}</a>
