@@ -77,15 +77,16 @@
                   <div class="form-group col-md-8">
                     <label >Upload Image</label>
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="validatedCustomFile" required>
-                      <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                      <input accept=".png" type="file" class="form-control-file" id="exampleFormControlFile1" [(ngModel)]="uploadFile" name="image" (change)="onChangeFile($event)" name="image" required #image="ngModel">
+                    </div>
+                    <div [hidden]="image.valid" class="alert alert-danger">
+                     Image Required
                     </div>
                   </div>
 
-
             </div>
 
-                <button *ngIf="title.valid && author.valid && price.valid && category.valid && price.value > 0" class="btn btn-primary" (click)="addBook()">Add Book</button>
+                <button *ngIf="image.valid && title.valid && author.valid && price.valid && category.valid && price.value > 0" class="btn btn-primary" (click)="addBook()">Add Book</button>
               </form>
               </div>
               </div>
@@ -101,7 +102,7 @@
             <div *ngFor="let book of userBooksArray" class="row">
               <div class="h-75 container" style="overflow: auto;">
                 <figure class="card card-product-grid">
-                  <div class="img-wrap"> <img src="bootstrap-ecommerce-html/images/items/1.jpg"> </div>
+                  <div class="img-wrap"> <img *ngIf="book.image "class="card-img-top" src="data:image/jpg;base64,{{book.image}}" alt="Card image cap"> </div>
                   <figcaption class="info-wrap border-top">
                     <a class="title">Title:{{book.title}}</a>
                     <p class="title">Title:{{book.author}}</p>

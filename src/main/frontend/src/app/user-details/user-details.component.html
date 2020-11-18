@@ -93,9 +93,60 @@
 
       <div class="col-4">
         <div class="card">
-          <h5 class="card-header">User Payment Details:</h5>
-          <div class="card-body">
-            <h5 class="card-title">Credit card:</h5>
+          <button class="btn btn-success" (click)="onCardEdit()">Add Card</button>
+          <h5 class="card-header">User Card Details:</h5>
+          <div *ngIf="!cardEdit" class="container">
+            <div *ngIf="userPaymentDetailsArray.length>0">
+              <div *ngFor="let paymentDetails of userPaymentDetailsArray" class="card-body">
+                <h5 class="card-title">Type:{{paymentDetails.paymentType}}</h5>
+                <h6 class="card-title">Card Name:{{paymentDetails.cardName}}</h6>
+                <h6 class="card-title">Card Number:{{paymentDetails.cardNumber}}</h6>
+                <button (click)="deleteUserPaymentDetails(paymentDetails)" class="btn btn-sm btn-outline-danger float-right">Delete Card</button>
+              </div>
+            </div>
+          </div>
+          <div  *ngIf="cardEdit" class="container">
+            <div class="card">
+              <h5 class="card-header">Add Card Details:</h5>
+              <div class="container">
+                <form>
+                  <div class="form-row">
+                    <div class="form-group col-md-12">
+                      <label >Card Type</label>
+                      <select  class="form-control" [(ngModel)]="userPaymentDetails.paymentType" ngModel required name="type" #type="ngModel">
+                      <option  value="debit card">Debit Card</option>
+                      <option  value="credit card">Credit Card</option>
+                    </select>
+                      <div [hidden]="type.valid" class="alert alert-danger">
+                        Select Question
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-12">
+                      <label >Card Number</label>
+                      <input type="text" class="form-control"   placeholder="Enter Card No" name="cardNumber" [(ngModel)]="userPaymentDetails.cardNumber" ngModel required #cardNumber="ngModel" minlength="12"  maxlength="12">
+                      <div [hidden]="cardNumber.valid" class="alert alert-danger">
+                        Enter 12 Digits Card Number
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-12">
+                      <label >Card Name</label>
+                      <input type="text" class="form-control"   placeholder="Enter Card Name" name="cardName" [(ngModel)]="userPaymentDetails.cardName" required #cardName="ngModel">
+                      <div [hidden]="cardName.valid" class="alert alert-danger">
+                        Enter Name on Card
+                      </div>
+                    </div>
+                  </div>
+
+                    <button class="btn btn-danger" (click)="onCardClose()">Cancel</button>
+                    <button type="submit" *ngIf="cardName.valid && cardNumber.valid && type.valid" class="btn btn-primary float-right" (click)="addUserPaymentDetails()">Add Details</button>
+
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>

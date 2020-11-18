@@ -16,7 +16,7 @@ export class AuthenticationService {
     let date= sessionStorage.getItem('date-time');
     let nowDate = new Date(date);
     let minutes = Math.floor((new Date().getTime() - nowDate.getTime()) / 1000 / 60  );
-    if(minutes>10){
+    if(minutes>20){
       this.logOut();
       return false;
     }
@@ -24,7 +24,9 @@ export class AuthenticationService {
   }
 
   logOut() {
-    this.userServiceService.logout();
-    sessionStorage.clear();
+    this.userServiceService.logout().subscribe(()=>{
+      sessionStorage.clear();
+    }
+    );
   }
 }

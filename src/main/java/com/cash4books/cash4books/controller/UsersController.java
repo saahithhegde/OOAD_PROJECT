@@ -1,11 +1,14 @@
 package com.cash4books.cash4books.controller;
 
+import com.cash4books.cash4books.dto.cart.UserCartDto;
 import com.cash4books.cash4books.dto.orders.BooksOrderDto;
 import com.cash4books.cash4books.dto.users.ForgotPasswordDto;
 import com.cash4books.cash4books.dto.users.UsersLoginDto;
+import com.cash4books.cash4books.entity.UserPaymentTypes;
 import com.cash4books.cash4books.entity.Users;
 import com.cash4books.cash4books.exception.UserNotLoggedInException;
 import com.cash4books.cash4books.services.impl.BookServiceImpl;
+import com.cash4books.cash4books.services.impl.PaymentServiceImpl;
 import com.cash4books.cash4books.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,9 @@ public class UsersController {
 
     @Autowired
     BookServiceImpl bookService;
+
+    @Autowired
+    PaymentServiceImpl paymentServiceImpl;
 
     @PostMapping(value = {"/createUser"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Users> createUser(@RequestBody Users newUserDetails) {
@@ -75,10 +81,10 @@ public class UsersController {
     }
 
 
-    @GetMapping(value = {"/logout"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateProfile(HttpServletRequest request) {
+    @GetMapping(value = {"/logout"})
+    public String logout(HttpServletRequest request) {
         userService.logoutUser(request);
-        return new ResponseEntity<>("Logged out successfully", HttpStatus.ACCEPTED);
+        return "logged Out";
     }
 
     @PostMapping(value = {"/forgotPassword"}, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -116,6 +122,35 @@ public class UsersController {
             return new ResponseEntity("User not logged in",HttpStatus.BAD_REQUEST);
         } catch (UnsupportedEncodingException e) {
             return new ResponseEntity("Failed to get seller history",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserPaymentTypes> addUserPaymentTypes(@RequestBody UserPaymentTypes userPaymentTypes , HttpServletRequest request, @RequestHeader(name = "Token") String token){
+        try {
+            UserPaymentTypes userPaymentTypesInfo = paymentServiceImpl.addUserPaymentsType(request,token,userPaymentTypes);
+            return new ResponseEntity(userPaymentTypesInfo, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserPaymentTypes> deleteUserPaymentTypes(@RequestBody UserPaymentTypes userPaymentTypes , HttpServletRequest request, @RequestHeader(name = "Token") String token){
+        try {
+            UserPaymentTypes userPaymentTypesInfo = paymentServiceImpl.deleteUserPaymentsType(request,token,userPaymentTypes);
+            return new ResponseEntity(userPaymentTypesInfo, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping(value="/getUserPaymentTypes" ,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserCartDto>> getUserCart(HttpServletRequest request, @RequestHeader(name = "Token") String token){
+        try {
+            List<UserPaymentTypes> userPaymentInfo = paymentServiceImpl.getUserPayments(request,token);
+            return new ResponseEntity(userPaymentInfo, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 }

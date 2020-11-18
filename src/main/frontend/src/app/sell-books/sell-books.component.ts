@@ -13,14 +13,14 @@ export class SellBooksComponent implements OnInit {
    addBookDto:BookDto
    message:string;
    userBooksArray:Array<BookDto>;
+   file:any;
+   uploadFile: any;
 
   constructor(private spinnerService: Ng4LoadingSpinnerService,private notificationService:NotificationService,private bookServiceService:BookServiceService) { }
 
   ngOnInit() {
     this.addBookDto=new BookDto();
     this.getUserBooks();
-
-
   }
 
   getUserBooks(){
@@ -39,9 +39,13 @@ export class SellBooksComponent implements OnInit {
 
   }
 
+  onChangeFile(event){
+    this.file = event.target.files[0];
+  }
+
   addBook(){
     this.spinnerService.show();
-    this.bookServiceService.addBook(this.addBookDto).subscribe(
+    this.bookServiceService.addBook(this.addBookDto,this.file).subscribe(
       (data)=>{
         if(data){
             this.getUserBooks();
@@ -76,5 +80,6 @@ export class SellBooksComponent implements OnInit {
       if(item.bookID === book.bookID) this.userBooksArray.splice(index,1);
     });
   }
+
 
 }
