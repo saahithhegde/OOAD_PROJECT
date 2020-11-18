@@ -3,6 +3,7 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { OrderParentDto } from '../model/orderParent.model';
 import { NotificationService } from '../services/notification.service';
 import { OrderServiceService } from '../services/order-service.service';
+import {PdfService} from "../services/pdf.service";
 
 @Component({
   selector: 'app-orders',
@@ -15,7 +16,7 @@ export class OrdersComponent implements OnInit {
   orderParentOrder: Array<OrderParentDto>
   orderParentSales: Array<OrderParentDto>
 
-  constructor(private spinnerService: Ng4LoadingSpinnerService,private notificationService:NotificationService, private orderServiceService: OrderServiceService) { }
+  constructor(private pdfservice:PdfService,private spinnerService: Ng4LoadingSpinnerService,private notificationService:NotificationService, private orderServiceService: OrderServiceService) { }
 
   orderHeadElements = ['OrderID', 'Order Date', 'Payment Type', 'Total Cost', 'Order Details'];
   salesHeadElements = ['Book ISBN', 'Sale Date', 'Buyer', 'Payment Type', 'Total Price'];
@@ -54,5 +55,10 @@ export class OrdersComponent implements OnInit {
         this.notificationService.showError(JSON.stringify(err.error),"error");
         setTimeout(()=>this.spinnerService.hide(),2000)
       });
+  }
+
+  generateInvoice(orderID: any) {
+    var data = document.getElementById(orderID);
+    this.pdfservice.captureScreen(data);
   }
 }

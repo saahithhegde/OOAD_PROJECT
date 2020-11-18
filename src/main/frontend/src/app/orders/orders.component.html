@@ -12,12 +12,12 @@
             </thead>
             <tbody>
               <div *ngIf="orderParentOrder.length>0">
-                <tr  *ngFor="let or of orderParentOrder">
+                <tr  *ngFor="let or of orderParentOrder" id="{{or.orders.orderID}}">
                   <td>{{or.orders.orderID}}</td>
                   <td>{{or.orders.orderDate}}</td>
                   <td>{{or.orders.paymentType}}</td>
                   <td>${{or.orders.total}}</td>
-                  <td> 
+                  <td>
                     <tr *ngFor="let ord of or.orderDetails">
                       <a class="title">{{ord?.title}}</a>
                       <p class="title">{{ord?.author}}</p>
@@ -26,8 +26,9 @@
                       <p class="title">{{ord?.bookID}}</p>
                       <div class="price mt-2">${{ord?.price}}</div>
                       <p class="title">{{ord?.seller}}</p>
-                    </tr>
+                     </tr>
                   </td>
+                <td><button class="btn btn-success" (click)="generateInvoice(or.orders.orderID)">Get Invoice</button></td>
                 </tr>
               </div>
             </tbody>
@@ -43,13 +44,14 @@
             <tbody>
               <div *ngIf="orderParentSales.length>0">
                 <div  *ngFor="let or of orderParentSales">
-                  <tr *ngFor="let ord of or.orderDetails"> 
+                  <tr *ngFor="let ord of or.orderDetails">
                     <td>{{ord?.isbn}}</td>
                     <td>{{or.orders.orderDate}}</td>
                     <td>{{ord?.buyer}}</td>
                     <td>{{or.orders.paymentType}}</td>
                     <td>${{or.orders.total}}</td>
-                  <!-- <td *ngFor="let ord of or.orderDetails"> 
+                    <a href="#" class="img-wrap"><img *ngIf="ord?.image"class="card-img-top" src="data:image/jpg;base64,{{ord.image}}" alt="Card image cap"></a>
+                  <!-- <td *ngFor="let ord of or.orderDetails">
                     <tr>
                       <a class="title">{{ord.orderDetails?.title}}</a>
                       <p class="title">{{ord.orderDetails?.author}}</p>
@@ -68,7 +70,7 @@
         </div>
       </div>
     </div>
-  </div> 
-</div>  
+  </div>
+</div>
 
 

@@ -8,6 +8,8 @@ import {CartDetails, CartDto} from "../model/cart.model";
 import {BookDto} from "../model/book.model";
 import {UserPaymentTypes} from "../model/user-payment-types.model";
 import {PaymentServiceService} from "../services/payment-service.service";
+import {PdfService} from "../services/pdf.service";
+import {OrderParentDto} from "../model/orderParent.model";
 
 @Component({
   selector: 'app-cart',
@@ -18,11 +20,13 @@ export class CartComponent implements OnInit {
   cartArray: CartDto
   paymentType: string;
   userPaymentDetailsArray:Array<UserPaymentTypes>;
+  orderParentOrder: OrderParentDto
 
-  constructor(private router:Router,private bookServiceService: BookServiceService, private spinnerService: Ng4LoadingSpinnerService, private notificationService: NotificationService, private cartServiceService: CartServiceService,private paymentService:PaymentServiceService) {
+  constructor(private pdfservice:PdfService,private router:Router,private bookServiceService: BookServiceService, private spinnerService: Ng4LoadingSpinnerService, private notificationService: NotificationService, private cartServiceService: CartServiceService,private paymentService:PaymentServiceService) {
   }
 
   ngOnInit() {
+    this.orderParentOrder = new OrderParentDto();
     this.userPaymentDetailsArray=new Array<UserPaymentTypes>();
     this.getUserCartDetails();
     this.getUserPaymentDetails();
@@ -82,6 +86,8 @@ export class CartComponent implements OnInit {
     this.spinnerService.show();
     this.paymentService.checkoutFromCart(this.paymentType).subscribe(
       (data)=>{
+        this.orderParentOrder=data;
+        console.log(this.orderParentOrder)
         this.notificationService.showWarning("Successfully Bought Books", "Success");
         this.getUserCartDetails();
         setTimeout(()=>this.spinnerService.hide(),2000);
@@ -89,6 +95,11 @@ export class CartComponent implements OnInit {
         this.notificationService.showError(JSON.stringify(err.error),"error");
         setTimeout(()=>this.spinnerService.hide(),2000);
       });
+  }
+
+  generatepdf(){
+    var data = document.getElementById('contentToConvert');
+    this.pdfservice.captureScreen(data);
   }
 }
 
