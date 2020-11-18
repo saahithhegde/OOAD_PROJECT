@@ -109,4 +109,12 @@ public class Book {
     public void setImage(byte[] image) {
         this.image = image;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

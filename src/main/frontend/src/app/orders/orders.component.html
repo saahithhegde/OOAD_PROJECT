@@ -1,3 +1,74 @@
-<p>
-  orders works!
-</p>
+
+<div class="card">
+  <div class="card-body">
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-6 overflow-auto" style="height: 600px;">
+          <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th *ngFor="let head of orderHeadElements">{{head}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <div *ngIf="orderParentOrder.length>0">
+                <tr  *ngFor="let or of orderParentOrder">
+                  <td>{{or.orders.orderID}}</td>
+                  <td>{{or.orders.orderDate}}</td>
+                  <td>{{or.orders.paymentType}}</td>
+                  <td>${{or.orders.total}}</td>
+                  <td> 
+                    <tr *ngFor="let ord of or.orderDetails">
+                      <a class="title">{{ord?.title}}</a>
+                      <p class="title">{{ord?.author}}</p>
+                      <p class="title">{{ord?.isbn}}</p>
+                      <p class="title">{{ord?.category}}</p>
+                      <p class="title">{{ord?.bookID}}</p>
+                      <div class="price mt-2">${{ord?.price}}</div>
+                      <p class="title">{{ord?.seller}}</p>
+                    </tr>
+                  </td>
+                </tr>
+              </div>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-6 overflow-auto" style="height: 600px;">
+          <table class="table" style="table-layout: fixed!important;">
+            <thead class="thead-dark">
+              <tr>
+                <th *ngFor="let head of salesHeadElements" scope="col">{{head}} </th>
+              </tr>
+            </thead>
+            <tbody>
+              <div *ngIf="orderParentSales.length>0">
+                <div  *ngFor="let or of orderParentSales">
+                  <tr *ngFor="let ord of or.orderDetails"> 
+                    <td>{{ord?.isbn}}</td>
+                    <td>{{or.orders.orderDate}}</td>
+                    <td>{{ord?.buyer}}</td>
+                    <td>{{or.orders.paymentType}}</td>
+                    <td>${{or.orders.total}}</td>
+                  <!-- <td *ngFor="let ord of or.orderDetails"> 
+                    <tr>
+                      <a class="title">{{ord.orderDetails?.title}}</a>
+                      <p class="title">{{ord.orderDetails?.author}}</p>
+                      <p class="title">{{ord.orderDetails?.isbn}}</p>
+                      <p class="title">{{ord.orderDetails?.category}}</p>
+                      <p class="title">{{ord.orderDetails?.bookID}}</p>
+                      <div class="price mt-2">${{ord.orderDetails?.price}}</div>
+                      <p class="title">{{ord.orderDetails?.seller}}</p>
+                    </tr>
+                    </td> -->
+                  </tr>
+                </div>
+              </div>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div> 
+</div>  
+
+
