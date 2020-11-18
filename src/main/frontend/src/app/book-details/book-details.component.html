@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-sm">
       <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="..." alt="Card image cap">
+        <img *ngIf="bookArray[0]?.image "class="card-img-top" src="data:image/jpg;base64,{{bookArray[0].image}}" alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">{{bookArray[0].title}}</h5>
         </div>
@@ -24,7 +24,7 @@
             <div class="card-body">
               <div class="row">
                 <aside class="col-sm-4">
-                  <a href="#" class="img-wrap"><img src="bootstrap-ecommerce-html/images/items/11.jpg"></a>
+                  <a href="#" class="img-wrap"><img *ngIf="book?.image"class="card-img-top" src="data:image/jpg;base64,{{book.image}}" alt="Card image cap"></a>
                 </aside> <!-- col.// -->
                 <div class="col-sm-8">
                   <a href="#" class="title mt-2 h5">{{book.title}}</a>
@@ -55,3 +55,6 @@
     </div>
   </div>
 </div>
+
+
+

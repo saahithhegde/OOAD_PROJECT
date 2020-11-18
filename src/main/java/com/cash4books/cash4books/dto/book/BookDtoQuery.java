@@ -7,15 +7,17 @@ public class BookDtoQuery {
     private String author;
     private String category;
     private String description;
+    private byte[] image;
 
 
-    public BookDtoQuery(String isbn, String title, String author, String category, String description, Long count) {
+    public BookDtoQuery(String isbn, String title, String author, String category, String description,byte[] image, Long count) {
         this.isbn = isbn;
         this.title = title;
         this.count = count;
         this.author = author;
         this.category = category;
         this.description = description;
+        this.image=image;
     }
 
     public String getIsbn() {
@@ -64,5 +66,13 @@ public class BookDtoQuery {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }

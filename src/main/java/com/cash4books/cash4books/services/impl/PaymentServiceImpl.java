@@ -1,10 +1,8 @@
 package com.cash4books.cash4books.services.impl;
 
 import com.cash4books.cash4books.controller.PaymentController;
-import com.cash4books.cash4books.entity.Book;
-import com.cash4books.cash4books.entity.OrderDetails;
-import com.cash4books.cash4books.entity.Orders;
-import com.cash4books.cash4books.entity.Users;
+import com.cash4books.cash4books.entity.*;
+import com.cash4books.cash4books.exception.UserNotLoggedInException;
 import com.cash4books.cash4books.repository.*;
 import com.cash4books.cash4books.utils.JsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +44,12 @@ public class PaymentServiceImpl {
 
     @Autowired
     OrderDetailsRepository orderDetailsRepository;
+
+    @Autowired
+    UserPayementRepository userPayementRepository;
+
+    @Autowired
+    UserServiceImpl userService;
 
     Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
@@ -124,6 +129,50 @@ public class PaymentServiceImpl {
         }
         else throw new Exception("Failed to execute transaction");
         return orders;
+    }
+
+    public List<UserPaymentTypes> getUserPayments(HttpServletRequest request,String token) throws Exception{
+        String email=sessionService.getSessionValidation(request,token);
+        if(email!=null) {
+            Users user=userService.getUserProfile(request,token);
+            List<UserPaymentTypes> userPaymentTypes=userPayementRepository.findAllByUsers(user);
+            return userPaymentTypes;
+        }
+        else{
+            throw new UserNotLoggedInException();
+        }
+    }
+
+    public UserPaymentTypes addUserPaymentsType(HttpServletRequest request,String token,UserPaymentTypes userPaymentTypes)throws Exception{
+        String email=sessionService.getSessionValidation(request,token);
+        if(email!=null) {
+            Users user=userService.getUserProfile(request,token);
+            userPaymentTypes.setUsers(user);
+            UserPaymentTypes userPaymentTypes1=userPayementRepository.findUserPaymentTypesByCardNumber(userPaymentTypes.getCardNumber());
+            if(userPaymentTypes1==null){
+                userPayementRepository.save(userPaymentTypes);
+            }
+            else {
+                throw new Exception("Card Number Already Present");
+            }
+            return userPaymentTypes;
+        }
+        else{
+            throw new UserNotLoggedInException();
+        }
+    }
+
+    public UserPaymentTypes deleteUserPaymentsType(HttpServletRequest request,String token,UserPaymentTypes userPaymentTypes)throws Exception{
+        String email=sessionService.getSessionValidation(request,token);
+        if(email!=null) {
+            Users user=userService.getUserProfile(request,token);
+            userPaymentTypes.setUsers(user);
+            userPayementRepository.delete(userPaymentTypes);
+            return userPaymentTypes;
+        }
+        else{
+            throw new UserNotLoggedInException();
+        }
     }
 
 

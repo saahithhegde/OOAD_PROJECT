@@ -2,7 +2,7 @@ package com.cash4books.cash4books.dto.cart;
 
 import com.cash4books.cash4books.entity.Book;
 
-public class CartDTO{
+public class CartDto {
     private String email;
 
     private Integer bookID;

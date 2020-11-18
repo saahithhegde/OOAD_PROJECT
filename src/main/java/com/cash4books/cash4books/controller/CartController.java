@@ -1,9 +1,8 @@
 package com.cash4books.cash4books.controller;
 
-import com.cash4books.cash4books.dto.cart.CartDTO;
+import com.cash4books.cash4books.dto.cart.CartDto;
+import com.cash4books.cash4books.dto.cart.UserCartDto;
 import com.cash4books.cash4books.entity.Book;
-import com.cash4books.cash4books.entity.Cart;
-import com.cash4books.cash4books.services.impl.BookServiceImpl;
 import com.cash4books.cash4books.services.impl.CartServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +26,9 @@ public class CartController {
 
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CartDTO> addBookToCart(@RequestBody Book book , HttpServletRequest request, @RequestHeader(name = "Token") String token){
+    public ResponseEntity<CartDto> addBookToCart(@RequestBody Book book , HttpServletRequest request, @RequestHeader(name = "Token") String token){
         try {
-            CartDTO newCartItem = cartServiceImpl.addToCart(book,request,token);
+            CartDto newCartItem = cartServiceImpl.addToCart(book,request,token);
             return new ResponseEntity(newCartItem, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
@@ -37,9 +36,9 @@ public class CartController {
       }
 
     @PostMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CartDTO> DeleteBookFromCart(@RequestBody Book book , HttpServletRequest request, @RequestHeader(name = "Token") String token){
+    public ResponseEntity<CartDto> DeleteBookFromCart(@RequestBody Book book , HttpServletRequest request, @RequestHeader(name = "Token") String token){
         try {
-            CartDTO deletedCartItem = cartServiceImpl.deleteFromCart(book,request,token);
+            CartDto deletedCartItem = cartServiceImpl.deleteFromCart(book,request,token);
             return new ResponseEntity(deletedCartItem, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
@@ -47,9 +46,9 @@ public class CartController {
     }
 
     @GetMapping(value="/getUserCart" ,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CartDTO>> getUserCart(HttpServletRequest request, @RequestHeader(name = "Token") String token){
+    public ResponseEntity<UserCartDto> getUserCart(HttpServletRequest request, @RequestHeader(name = "Token") String token){
         try {
-            List<CartDTO> userCartItem = cartServiceImpl.getUserCart(request,token);
+            UserCartDto userCartItem = cartServiceImpl.getUserCart(request,token);
             return new ResponseEntity(userCartItem, HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);

@@ -25,8 +25,8 @@ export class UserServiceService {
     var header =this.commonServices.getHeaders();
     return this.httpClient.get<UserModelDto>(AppConstants.GETPROFILE,{headers:header});
    }
-   logout(){
-     this.httpClient.get(AppConstants.LOGOUT);
+   logout():Observable<any>{
+     return this.httpClient.get<any>(AppConstants.LOGOUT);
    }
    updateUserDetails(userDetials:UserModelDto):Observable<UserModelDto>{
      var header=this.commonServices.getHeaders();
