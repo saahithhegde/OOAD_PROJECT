@@ -7,6 +7,7 @@ import com.cash4books.cash4books.entity.Users;
 import com.cash4books.cash4books.exception.UserNotLoggedInException;
 import com.cash4books.cash4books.repository.UserRepository;
 import com.cash4books.cash4books.services.impl.BookServiceImpl;
+import com.cash4books.cash4books.services.impl.PaymentServiceImpl;
 import com.cash4books.cash4books.services.impl.SessionServiceImpl;
 import com.cash4books.cash4books.services.impl.UserServiceImpl;
 import org.junit.Assert;
@@ -53,6 +54,9 @@ public class UserControllerTest {
 
     @MockBean
     UserRepository userRepository;
+
+    @MockBean
+    PaymentServiceImpl paymentService;
 
     @Test
     public void shouldCreateUser() throws Exception {
@@ -141,7 +145,7 @@ public class UserControllerTest {
                         .andReturn()
                         .getResponse()
                         .getContentAsString()
-                        .contains("Logged out successfully"));
+                        .contains("logged Out"));
     }
 
     @Test

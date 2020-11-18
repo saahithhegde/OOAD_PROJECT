@@ -143,7 +143,7 @@ public class PaymentControllerTest {
                 .header("Token","test")
                 .header("paymentType","credit card")
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
 
     }
 

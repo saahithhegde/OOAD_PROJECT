@@ -1,6 +1,7 @@
 package com.cash4books.cash4books.services.impl;
 
-import com.cash4books.cash4books.dto.cart.CartDTO;
+import com.cash4books.cash4books.dto.cart.CartDto;
+import com.cash4books.cash4books.dto.cart.UserCartDto;
 import com.cash4books.cash4books.entity.Book;
 import com.cash4books.cash4books.entity.Cart;
 import com.cash4books.cash4books.entity.Users;
@@ -51,8 +52,9 @@ public class CartServiceImplTest {
     Book book;
     Cart cart;
     List<Cart> cartList;
-    List<CartDTO> cartDTOList;
-    CartDTO cartDTO;
+    List<CartDto> cartDTOList;
+    CartDto cartDTO;
+    UserCartDto userCartDto;
 
     @Before
     public void init(){
@@ -76,11 +78,14 @@ public class CartServiceImplTest {
         cart.setCartID(1);
         cartList = new ArrayList<>();
         cartList.add(cart);
-        cartDTO = new CartDTO();
+        cartDTO = new CartDto();
         cartDTO.setEmail("test");
         cartDTO.setBookID(1);
         cartDTOList = new ArrayList<>();
         cartDTOList.add(cartDTO);
+        userCartDto = new UserCartDto();
+        userCartDto.setTotal(2.5);
+        userCartDto.setCartDetails(cartDTOList);
 
     }
 
@@ -92,7 +97,7 @@ public class CartServiceImplTest {
         when(cartRepository.findCartByBookIDAndUsers(Mockito.anyInt(),Mockito.any(Users.class))).thenReturn(null);
         when(cartRepository.save(Mockito.any(Cart.class))).thenReturn(cart);
         when(bookService.getBookById(Mockito.anyInt())).thenReturn(book);
-        CartDTO newCart = cartService.addToCart(book,httpServletRequest,"test");
+        CartDto newCart = cartService.addToCart(book,httpServletRequest,"test");
         Assert.assertEquals(1,newCart.getBookID(),0);
         Assert.assertEquals("test",newCart.getEmail());
     }
@@ -153,7 +158,7 @@ public class CartServiceImplTest {
         when(cartRepository.findCartByBookIDAndUsers(Mockito.anyInt(),Mockito.any(Users.class))).thenReturn(cart);
         doNothing().when(cartRepository).delete(Mockito.any(Cart.class));
         when(bookService.getBookById(Mockito.anyInt())).thenReturn(book);
-        CartDTO deletedCart = cartService.deleteFromCart(book,httpServletRequest,"test");
+        CartDto deletedCart = cartService.deleteFromCart(book,httpServletRequest,"test");
         Assert.assertEquals(1,deletedCart.getBookID(),0);
         Assert.assertEquals("test",deletedCart.getEmail());
     }
@@ -194,8 +199,8 @@ public class CartServiceImplTest {
         when(userService.getUserProfile(Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(user);
         when(cartRepository.findAllByUsers(Mockito.any(Users.class))).thenReturn(cartList);
         when(bookService.getBookById(Mockito.anyInt())).thenReturn(book);
-        List<CartDTO> result = cartService.getUserCart(httpServletRequest, "test");
-        Assert.assertEquals(1,result.get(0).getBookID(),0);
+        UserCartDto result = cartService.getUserCart(httpServletRequest, "test");
+        Assert.assertEquals(1,result.getCartDetails().get(0).getBookID(),0);
     }
 
 

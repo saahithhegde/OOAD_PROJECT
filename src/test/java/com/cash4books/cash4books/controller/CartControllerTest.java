@@ -1,9 +1,11 @@
 package com.cash4books.cash4books.controller;
 
-import com.cash4books.cash4books.dto.cart.CartDTO;
+import com.cash4books.cash4books.dto.cart.CartDto;
+import com.cash4books.cash4books.dto.cart.UserCartDto;
 import com.cash4books.cash4books.entity.Book;
 import com.cash4books.cash4books.services.impl.CartServiceImpl;
 import com.cash4books.cash4books.services.impl.SessionServiceImpl;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -36,20 +38,33 @@ public class CartControllerTest {
     @MockBean
     private CartServiceImpl cartService;
 
-
-    @Test
-    public void addBookTest() throws Exception {
-        CartDTO cartDTO = new CartDTO();
-        Book book = new Book();
+    CartDto cartDTO;
+    Book book;
+    String email;
+    UserCartDto userCartDto;
+    List<CartDto> cartDtoList;
+    @Before
+    public void init(){
+        cartDTO = new CartDto();
+        book = new Book();
         book.setBookID(1);
         book.setTitle("book_5");
         book.setAuthor("abc");
         book.setCategory("SE");
         book.setPrice(2.5);
-        String email = "test";
+        email = "test";
         cartDTO.setBookID(1);
         cartDTO.setEmail(email);
         cartDTO.setBookDetails(book);
+        userCartDto = new UserCartDto();
+        cartDtoList = new ArrayList<>();
+        cartDtoList.add(cartDTO);
+        userCartDto.setTotal(2.5);
+        userCartDto.setCartDetails(cartDtoList);
+    }
+    @Test
+    public void addBookTest() throws Exception {
+
 
         when(cartService.addToCart(Mockito.any(Book.class),Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(cartDTO);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/cart/add")
@@ -77,17 +92,6 @@ public class CartControllerTest {
 
     @Test
     public void deleteBookTest() throws Exception {
-        CartDTO cartDTO = new CartDTO();
-        Book book = new Book();
-        book.setBookID(1);
-        book.setTitle("book_5");
-        book.setAuthor("abc");
-        book.setCategory("SE");
-        book.setPrice(2.5);
-        String email = "test";
-        cartDTO.setBookID(1);
-        cartDTO.setEmail(email);
-        cartDTO.setBookDetails(book);
 
         when(cartService.deleteFromCart(Mockito.any(Book.class),Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(cartDTO);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/cart/delete")
@@ -115,30 +119,18 @@ public class CartControllerTest {
 
     @Test
     public void getUserCartTest() throws Exception {
-        CartDTO cartDTO = new CartDTO();
-        Book book = new Book();
-        book.setBookID(1);
-        book.setTitle("book_5");
-        book.setAuthor("abc");
-        book.setCategory("SE");
-        book.setPrice(2.5);
-        String email = "test";
-        cartDTO.setBookID(1);
-        cartDTO.setEmail(email);
-        cartDTO.setBookDetails(book);
-        List<CartDTO> cartDTOList = new ArrayList<>();
-        cartDTOList.add(cartDTO);
-        when(cartService.getUserCart(Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(cartDTOList);
+
+        when(cartService.getUserCart(Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(userCartDto);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/cart/getUserCart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"bookID\": 1,\"title\":\"book_5\", \"author\" : \"abc\",\"price\" : 2.5,\"category\" : \"SE\"}")
                 .header("Token","test")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.[0].email").exists())
-                .andExpect(jsonPath("$.[0].bookID").exists())
-                .andExpect(jsonPath("$.[0].email").value("test"))
-                .andExpect(jsonPath("$.[0].bookID").value(1));
+                .andExpect(jsonPath("$.cartDetails.[0].email").exists())
+                .andExpect(jsonPath("$.cartDetails.[0].bookID").exists())
+                .andExpect(jsonPath("$.cartDetails.[0].email").value("test"))
+                .andExpect(jsonPath("$.cartDetails.[0].bookID").value(1));
     }
 
     @Test

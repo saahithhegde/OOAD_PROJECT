@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -89,7 +90,7 @@ public class BookServiceImplTest {
         email = "test";
         list = new ArrayList<>();
         list.add(expectedBook);
-        bookDtoQuery = new BookDtoQuery("1234","book_5","abc","SE","description",1l);
+        bookDtoQuery = new BookDtoQuery("1234","book_5","abc","SE","description",null,1l);
         bookDtoQueryList = new ArrayList<>();
         bookDtoQueryList.add(bookDtoQuery);
         orderIDList = new ArrayList<>();
@@ -221,6 +222,34 @@ public class BookServiceImplTest {
         Assert.assertEquals(list.get(0).getBookID(),sellerBooks.get(0).getBookID());
     }
 
+    @Test
+    public void searchByAnyTest(){
+        when(bookRepository.search(Mockito.anyString())).thenReturn(list);
+        List<Book> result = bookService.searchByAny("abc");
+        Assert.assertEquals(1,result.size());
+        Assert.assertEquals("abc",result.get(0).getAuthor());
+    }
+
+@Test
+    public void deleteListingTest() throws Exception {
+    when(sessionServiceImpl.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(email);
+    when(bookRepository.findByBookID(Mockito.anyInt())).thenReturn(expectedBook);
+    doNothing().when(bookRepository).delete(Mockito.any(Book.class));
+    Book result = bookService.deleteListing(expectedBook, httpServletRequest, "test");
+    Assert.assertEquals(expectedBook.getBookID(),result.getBookID());
+}
+
+    @Test
+    public void deleteListingUserNotLoggedTest() throws Exception {
+        when(sessionServiceImpl.getSessionValidation(Mockito.any(HttpServletRequest.class),Mockito.anyString())).thenReturn(null);
+        Exception exception = assertThrows(Exception.class, () -> {
+            bookService.deleteListing(expectedBook,httpServletRequest,"test");
+        });
+        String expectedMessage = "User Not Logged In";
+        String actualMessage = exception.getMessage();
+
+        Assert.assertEquals(expectedMessage,actualMessage);
+    }
 
 
 }

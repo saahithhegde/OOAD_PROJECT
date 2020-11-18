@@ -273,7 +273,7 @@ public class BookControllerTest {
 
     @Test
     public void getDistinctIsbnTest() throws Exception {
-        BookDtoQuery bookDtoQuery = new BookDtoQuery("1234","book_5","abc","SE","description",1L);
+        BookDtoQuery bookDtoQuery = new BookDtoQuery("1234","book_5","abc","SE","description",null,1L);
 
         List<BookDtoQuery> bookList = new ArrayList<>();
         bookList.add(bookDtoQuery);

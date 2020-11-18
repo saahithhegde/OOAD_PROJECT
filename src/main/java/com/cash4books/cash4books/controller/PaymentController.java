@@ -56,8 +56,11 @@ public class PaymentController {
             return new ResponseEntity(paymentServiceImpl.getBooksJson(availableBooks),HttpStatus.UNPROCESSABLE_ENTITY);
         }
         Orders orders;
-        orders = paymentServiceImpl.createOrder(availableBooks,buyer.getEmail(),paymentType);
-
+        try {
+            orders = paymentServiceImpl.createOrder(availableBooks,buyer.getEmail(),paymentType);
+        } catch (JsonProcessingException e) {
+            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         try {
             orders = paymentServiceImpl.executeTransaction(orders,availableBooks,buyer);
             List<OrderDetails> orderDetailsList = paymentServiceImpl.saveOrderDetails(availableBooks, orders.getOrderID(), buyer.getEmail());
