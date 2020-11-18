@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit {
       (data)=>{
         this.dashBoardBookArray=data;
         this.defaultBookArray=data;
+        console.log(this.defaultBookArray);
         setTimeout(()=>this.spinnerService.hide(),3000);
       },
       (err)=>{

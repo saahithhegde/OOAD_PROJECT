@@ -1,4 +1,5 @@
 export class BookDto{
+
    isbn:Number;
    bookID:Number;
    title:string;
@@ -7,4 +8,7 @@ export class BookDto{
    category:string;
    count:Number;
    description:string;
+   image:string;
+
+
 }

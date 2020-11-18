@@ -44,8 +44,8 @@ public class BookDetailsController {
     @Autowired
     BookServiceImpl bookServiceImpl;
 
-    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Book> addBook( @RequestParam(value = "file") MultipartFile file, @RequestParam(value = "book") String bookJson , HttpServletRequest request, @RequestHeader(name = "Token") String token){
+    @PostMapping(value = "/add", headers="Content-Type=multipart/form-data", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Book> addBook( @RequestParam(value = "file",required = false) MultipartFile file, @RequestParam(value = "book") String bookJson , HttpServletRequest request, @RequestHeader(name = "Token") String token){
         ObjectMapper objectMapper = JsonUtil.getObjectMapper();
         Book book = null;
         try {

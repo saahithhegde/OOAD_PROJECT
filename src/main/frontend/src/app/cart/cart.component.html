@@ -13,12 +13,12 @@
     </tr>
     </thead>
     <tbody>
-    <div *ngIf="cartArray.length>0">
-      <div *ngFor="let items of cartArray">
+    <div *ngIf="cartArray?.cartDetails">
+      <div *ngFor="let items of cartArray.cartDetails">
           <tr>
             <td scope="col">
               <figure class="itemside align-items-center">
-                <div class="aside"><img src="bootstrap-ecommerce-html/images/items/1.jpg" class="img-sm"></div>
+                <div class="aside"><img *ngIf="items.bookDetails.image "class="card-img-top" src="data:image/jpg;base64,{{items.bookDetails.image}}" alt="Card image cap"></div>
                 <figcaption class="info">
                   <p  class="title text-dark">{{items.bookDetails.title}}</p>
                   <br>
@@ -51,22 +51,17 @@
 <div class="card">
 <div class="card-body">
 		<dl class="dlist-align">
-		  <dt>Total price:</dt>
-		  <dd class="text-right">$69.97</dd>
-		</dl>
-		<dl class="dlist-align">
-		  <dt>Discount:</dt>
-		  <dd class="text-right text-danger">- $10.00</dd>
-		</dl>
-		<dl class="dlist-align">
 		  <dt>Total:</dt>
-		  <dd class="text-right text-dark b"><strong>$59.97</strong></dd>
+		  <dd class="text-right text-dark b"><strong>${{cartArray.total}}</strong></dd>
 		</dl>
 		<hr>
-		<p class="text-center mb-3">
-			<img src="bootstrap-ecommerce-html/images/misc/payments.png" height="26">
-		</p>
-		<a href="#" class="btn btn-light btn-block">Check Out</a>
+  <div *ngIf="cartArray.total>0">
+  <label>Select Payment Type</label><br>
+    <select class="form-control" placeholder="Select Payment Type" [(ngModel)]="paymentType" ngModel required name="type" #type="ngModel">
+      <option *ngFor="let paymentDetails of userPaymentDetailsArray" [value]="paymentDetails.paymentType" >{{paymentDetails.cardNumber}}</option>
+    </select>
+		<button *ngIf="paymentType" (click)="checkout()" class="btn btn-dark btn-block">Check Out</button>
+  </div>
 </div> <!-- card-body.// -->
 </div> <!-- card.// -->
 

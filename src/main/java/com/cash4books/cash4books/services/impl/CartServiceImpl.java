@@ -1,7 +1,8 @@
 package com.cash4books.cash4books.services.impl;
 
 import com.cash4books.cash4books.controller.BookDetailsController;
-import com.cash4books.cash4books.dto.cart.CartDTO;
+import com.cash4books.cash4books.dto.cart.CartDto;
+import com.cash4books.cash4books.dto.cart.UserCartDto;
 import com.cash4books.cash4books.entity.Book;
 import com.cash4books.cash4books.entity.Cart;
 import com.cash4books.cash4books.entity.Users;
@@ -36,7 +37,7 @@ public class CartServiceImpl implements CartService {
     Logger logger = LoggerFactory.getLogger(BookDetailsController.class);
 
     @Override
-    public CartDTO addToCart(Book book, HttpServletRequest request,String token) throws UnsupportedEncodingException, Exception {
+    public CartDto addToCart(Book book, HttpServletRequest request, String token) throws UnsupportedEncodingException, Exception {
         String email=sessionService.getSessionValidation(request,token);
         if(email!=null) {
             Users user=userService.getUserProfile(request,token);
@@ -53,7 +54,7 @@ public class CartServiceImpl implements CartService {
             newCartItem.setBookID(book.getBookID());
             cartRepository.save(newCartItem);
             logger.info("Successfully added book to cart:"+book.getTitle());
-            CartDTO newCartItemWithBook=new CartDTO();
+            CartDto newCartItemWithBook=new CartDto();
             Book bookDetails=bookService.getBookById(book.getBookID());
             newCartItemWithBook.setEmail(email);
             newCartItemWithBook.setBookID(bookDetails.getBookID());
@@ -67,7 +68,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDTO deleteFromCart(Book book, HttpServletRequest request,String token) throws UnsupportedEncodingException, Exception {
+    public CartDto deleteFromCart(Book book, HttpServletRequest request, String token) throws UnsupportedEncodingException, Exception {
         String email=sessionService.getSessionValidation(request,token);
         if(email!=null) {
             Users user=userService.getUserProfile(request,token);
@@ -77,7 +78,7 @@ public class CartServiceImpl implements CartService {
             }
             cartRepository.delete(cart);
             logger.info("Successfully deleted book from cart:");
-            CartDTO deletedCartItem=new CartDTO();
+            CartDto deletedCartItem=new CartDto();
             deletedCartItem.setEmail(email);
             deletedCartItem.setBookID(cart.getBookID());
             return deletedCartItem;
@@ -89,12 +90,12 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartDTO> getUserCart(HttpServletRequest request, String token) throws UnsupportedEncodingException, Exception {
+    public UserCartDto getUserCart(HttpServletRequest request, String token) throws UnsupportedEncodingException, Exception {
         String email=sessionService.getSessionValidation(request,token);
         if(email!=null) {
             Users user=userService.getUserProfile(request,token);
             List<Cart> cartItems = cartRepository.findAllByUsers(user);
-            List<CartDTO> cartItemsWithBookDetails=getUserBookDetailsFromCart(cartItems);
+            UserCartDto cartItemsWithBookDetails=getUserBookDetailsFromCart(cartItems);
             return cartItemsWithBookDetails;
         }
         else{
@@ -102,18 +103,28 @@ public class CartServiceImpl implements CartService {
         }
     }
 
-    private List<CartDTO> getUserBookDetailsFromCart(List<Cart> cartItems)throws Exception {
-        List<CartDTO> cartItemsWithBookDetails=new ArrayList<CartDTO>();
+    private UserCartDto getUserBookDetailsFromCart(List<Cart> cartItems)throws Exception {
+        UserCartDto userCart=new UserCartDto();
+        int total=0;
+        List<CartDto> cartItemsWithBookDetails=new ArrayList<CartDto>();
         for (Cart items: cartItems) {
-                CartDTO cartDetails=new CartDTO();
+                CartDto cartDetails=new CartDto();
                 Book bookDetails=new Book();
                 bookDetails=bookService.getBookById(items.getBookID());
-                cartDetails.setEmail(items.getUser().getEmail());
-                cartDetails.setBookID(items.getBookID());
-                cartDetails.setBookDetails(bookDetails);
-                cartItemsWithBookDetails.add(cartDetails);
+                if(bookDetails!=null) {
+                    cartDetails.setEmail(items.getUser().getEmail());
+                    cartDetails.setBookID(items.getBookID());
+                    cartDetails.setBookDetails(bookDetails);
+                    cartItemsWithBookDetails.add(cartDetails);
+                    total += bookDetails.getPrice();
+                }
+                else{
+                    cartRepository.delete(items);
             }
-            return cartItemsWithBookDetails;
+            }
+        userCart.setTotal(total);
+        userCart.setCartDetails(cartItemsWithBookDetails);
+            return userCart;
     }
 
 }

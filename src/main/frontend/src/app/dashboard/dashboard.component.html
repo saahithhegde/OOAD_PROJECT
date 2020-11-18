@@ -35,7 +35,7 @@
     <div *ngFor="let data of dashBoardBookArray">
       <div class="col-md-3 col-sm-6">
         <div class="card" style="width: 20rem; height: 20rem;">
-          <img class="card-img-top" src="..." alt="Card image cap">
+          <img *ngIf="data.image "class="card-img-top" src="data:image/jpg;base64,{{data.image}}" alt="Card image cap">
           <div class="card-body">
             <h5 class="card-title">{{data.title}}</h5>
             <p class="card-text">{{data.author}}</p>

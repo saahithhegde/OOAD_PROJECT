@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {BookServiceService} from "../services/book-service.service";
 import {Ng4LoadingSpinnerService} from "ng4-loading-spinner";
 import {NotificationService} from "../services/notification.service";
 import {CartServiceService} from "../services/cart-service.service";
-import {CartDto} from "../model/cart.model";
+import {CartDetails, CartDto} from "../model/cart.model";
 import {BookDto} from "../model/book.model";
+import {UserPaymentTypes} from "../model/user-payment-types.model";
+import {PaymentServiceService} from "../services/payment-service.service";
 
 @Component({
   selector: 'app-cart',
@@ -13,20 +15,25 @@ import {BookDto} from "../model/book.model";
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-  cartArray:Array<CartDto>;
+  cartArray: CartDto
+  paymentType: string;
+  userPaymentDetailsArray:Array<UserPaymentTypes>;
 
-  constructor(private bookServiceService:BookServiceService,private spinnerService:Ng4LoadingSpinnerService,private notificationService:NotificationService,private cartServiceService:CartServiceService) { }
+  constructor(private router:Router,private bookServiceService: BookServiceService, private spinnerService: Ng4LoadingSpinnerService, private notificationService: NotificationService, private cartServiceService: CartServiceService,private paymentService:PaymentServiceService) {
+  }
 
   ngOnInit() {
-    this.cartArray=new Array<CartDto>();
+    this.userPaymentDetailsArray=new Array<UserPaymentTypes>();
     this.getUserCartDetails();
+    this.getUserPaymentDetails();
   }
 
   getUserCartDetails() {
+    this.cartArray = new CartDto();
     this.cartServiceService.getUserCart().subscribe(
       (data) => {
-        if (data) {
-          this.cartArray=data;
+        if (data.cartDetails.length>0) {
+          this.cartArray = data
           setTimeout(() => this.spinnerService.hide(), 3000);
         } else {
           this.notificationService.showWarning("Empty Cart", "No Items");
@@ -41,21 +48,47 @@ export class CartComponent implements OnInit {
   removeFromCart(bookDetails: BookDto) {
     this.cartServiceService.deleteFromCart(bookDetails).subscribe(
       (data) => {
-        if (data.bookID && data.email) {
+        if (data) {
           setTimeout(() => this.spinnerService.hide(), 3000);
           this.notificationService.showWarning("Deleted entry", "Deleted");
-          this.removeBook(data);
+          this.getUserCartDetails();
         }
       }, (err) => {
         setTimeout(() => this.spinnerService.hide(), 3000);
         this.notificationService.showError(JSON.stringify(err.error), "error");
       });
-
   }
-  removeBook(book:CartDto){
-    this.cartArray.forEach( (item, index) => {
-      if(item.bookID === book.bookID) this.cartArray.splice(index,1);
-    });
+  getUserPaymentDetails(){
+    this.spinnerService.show();
+    this.paymentService.getUserPaymentTypes().subscribe(
+      (data)=>{
+        if(data.length>0){
+          this.userPaymentDetailsArray=data;
+          setTimeout(()=>this.spinnerService.hide(),2000)
+        }
+        else{
+          this.notificationService.showWarning("No Card Details", "Register Payment Types");
+          this.spinnerService.show();
+          setTimeout(() => {this.router.navigate(['/user']);},5000);
+          this.notificationService.showSuccess("Enter Card Details", "Add Details");
+          setTimeout(() => this.spinnerService.hide(), 3000);
+        }
+      },(err)=>{
+        this.notificationService.showError(JSON.stringify(err.error),"error");
+        setTimeout(()=>this.spinnerService.hide(),2000);
+      });
+  }
+  checkout(){
+    this.spinnerService.show();
+    this.paymentService.checkoutFromCart(this.paymentType).subscribe(
+      (data)=>{
+        this.notificationService.showWarning("Successfully Bought Books", "Success");
+        this.getUserCartDetails();
+        setTimeout(()=>this.spinnerService.hide(),2000);
+    },(err)=>{
+        this.notificationService.showError(JSON.stringify(err.error),"error");
+        setTimeout(()=>this.spinnerService.hide(),2000);
+      });
   }
 }
 

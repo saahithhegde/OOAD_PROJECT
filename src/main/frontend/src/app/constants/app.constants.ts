@@ -2,7 +2,7 @@ export class AppConstants{
   //user apis
   public static readonly LOGIN="/api/users/login";
   public static readonly CREATEUSER="/api/users/createUser";
-  public static readonly LOGOUT="/api/users/login";
+  public static readonly LOGOUT="/api/users/logout";
   public static readonly GETPROFILE="/api/users/getProfile";
   public static readonly UPDATEPROFILE="/api/users/updateProfile";
   public static readonly FORGOTPASSWORD="/api/users/forgotPassword";
@@ -17,5 +17,13 @@ export class AppConstants{
   public static readonly ADDTOCART="api/cart/add";
   public static readonly GETUSERCART="api/cart/getUserCart";
   public static readonly DELETEFROMCART="api/cart/delete";
+
+  //payment api checkout
+  public static readonly CHECKOUT= "api/payment/submit";
+
+  //payment api
+  public static readonly ADDPAYMENTTYPES="api/users/add";
+  public static readonly DELETEPAYMENTTYPES="api/users/delete";
+  public static readonly GETPAYMENTTYPES="api/users/getUserPaymentTypes";
 
 }
