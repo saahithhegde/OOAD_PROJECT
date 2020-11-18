@@ -1,5 +1,9 @@
-"# cs6359001-f20-project-private-repo-cs6359001-f20-team-5"   
+"# cs6359001-f20-project-private-repo-cs6359001-f20-team-5" 
+
+#CASH4BOOKS
 Project Iteration 1 Report: https://github.com/UTDClassroom/cs6359001-f20-project-private-repo-cs6359001-f20-team-5/wiki/Iteration1-Report
+Project Iteration 2 Report: https://github.com/UTDClassroom/cs6359001-f20-project-private-repo-cs6359001-f20-team-5/wiki/Iteration2-Report
+Project Iteration 3 Report: https://github.com/UTDClassroom/cs6359001-f20-project-private-repo-cs6359001-f20-team-5/wiki/Iteration3-Report
 
 # SUMMARY
 CASH4BOOKS is an E-commerce website to buy and sell used books within the university community (UTD). It aims to provide a simple and a convenient way for students to buy and sell used books online. Students need to register using their Netid and Password to avail the services. Once registered they can login using those credentials. Students can either put a book on sale by entering a short description about its quality and can enter a price tag and ISBN or they can buy a book on sale using the various search parameters like ISBN, Subjects, Publishers, Price range etc. A user visiting the website can see a wide range of books arranged in respective categories. The user may select a desired book and view its price. The user may even search for specific books on the website through different filter criterias. Once the user has selected the desired book they can pay for it by entering the required details.
