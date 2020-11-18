@@ -1,8 +1,8 @@
 "# cs6359001-f20-project-private-repo-cs6359001-f20-team-5" 
 
-#CASH4BOOKS
-Project Iteration 1 Report: https://github.com/UTDClassroom/cs6359001-f20-project-private-repo-cs6359001-f20-team-5/wiki/Iteration1-Report
-Project Iteration 2 Report: https://github.com/UTDClassroom/cs6359001-f20-project-private-repo-cs6359001-f20-team-5/wiki/Iteration2-Report
+# CASH4BOOKS 
+Project Iteration 1 Report: https://github.com/UTDClassroom/cs6359001-f20-project-private-repo-cs6359001-f20-team-5/wiki/Iteration1-Report  
+Project Iteration 2 Report: https://github.com/UTDClassroom/cs6359001-f20-project-private-repo-cs6359001-f20-team-5/wiki/Iteration2-Report  
 Project Iteration 3 Report: https://github.com/UTDClassroom/cs6359001-f20-project-private-repo-cs6359001-f20-team-5/wiki/Iteration3-Report
 
 # SUMMARY
