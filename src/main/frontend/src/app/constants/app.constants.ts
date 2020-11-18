@@ -6,6 +6,9 @@ export class AppConstants{
   public static readonly GETPROFILE="/api/users/getProfile";
   public static readonly UPDATEPROFILE="/api/users/updateProfile";
   public static readonly FORGOTPASSWORD="/api/users/forgotPassword";
+  public static readonly GETUSERORDERDETAILS="/api/users/buyHistory";
+  public static readonly GETUSERPURCHASEDETAILS="/api/users/sellHistory";
+  
 
   //book apis
   public static readonly ADDBOOK="/api/book/add";
@@ -17,5 +20,6 @@ export class AppConstants{
   public static readonly ADDTOCART="api/cart/add";
   public static readonly GETUSERCART="api/cart/getUserCart";
   public static readonly DELETEFROMCART="api/cart/delete";
+  
 
 }

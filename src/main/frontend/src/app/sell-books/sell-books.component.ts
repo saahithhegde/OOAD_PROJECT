@@ -19,8 +19,6 @@ export class SellBooksComponent implements OnInit {
   ngOnInit() {
     this.addBookDto=new BookDto();
     this.getUserBooks();
-
-
   }
 
   getUserBooks(){

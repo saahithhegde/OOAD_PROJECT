@@ -13,6 +13,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { CartComponent } from './cart/cart.component';
 import {AuthGuardService} from './auth-services/auth-guard.service'
+import {OrdersComponent} from './orders/orders.component';
 
 const routes: Routes = [
   { path: '', component: LandingHomepageComponent,canActivate:[AuthGuardService],
@@ -22,6 +23,7 @@ const routes: Routes = [
     { path: 'sell', component: SellBooksComponent,canActivate:[AuthGuardService]},
     { path: 'bookdetails/:isbn', component: BookDetailsComponent,canActivate:[AuthGuardService]},
     { path: 'dashboard', component: DashboardComponent,canActivate:[AuthGuardService]},
+    { path: 'orderHistory', component: OrdersComponent,canActivate:[AuthGuardService]},
     { path: 'user', component: UserDetailsComponent,canActivate:[AuthGuardService]}
   ]},
   { path: 'login', component: LoginComponent },
