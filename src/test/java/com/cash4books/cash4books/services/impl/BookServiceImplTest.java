@@ -89,7 +89,7 @@ public class BookServiceImplTest {
         email = "test";
         list = new ArrayList<>();
         list.add(expectedBook);
-        bookDtoQuery = new BookDtoQuery("1234","book_5","abc","SE",1l);
+        bookDtoQuery = new BookDtoQuery("1234","book_5","abc","SE","description",1l);
         bookDtoQueryList = new ArrayList<>();
         bookDtoQueryList.add(bookDtoQuery);
         orderIDList = new ArrayList<>();
