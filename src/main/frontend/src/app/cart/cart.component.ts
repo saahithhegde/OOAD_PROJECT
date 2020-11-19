@@ -92,8 +92,15 @@ export class CartComponent implements OnInit {
         this.getUserCartDetails();
         setTimeout(()=>this.spinnerService.hide(),2000);
     },(err)=>{
-        this.notificationService.showError(JSON.stringify(err.error),"error");
-        setTimeout(()=>this.spinnerService.hide(),2000);
+        if(err.status===422){
+          this.notificationService.showWarning("Few Items not Available refreshing cart", "Failed");
+          this.getUserCartDetails();
+          setTimeout(() => this.spinnerService.hide(), 2000);
+        }
+        else {
+          this.notificationService.showError(JSON.stringify(err.error), "error");
+          setTimeout(() => this.spinnerService.hide(), 2000);
+        }
       });
   }
 

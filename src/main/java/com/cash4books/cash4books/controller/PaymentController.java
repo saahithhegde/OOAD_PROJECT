@@ -55,7 +55,7 @@ public class PaymentController {
         List<Book> availableBooks;
         availableBooks = paymentServiceImpl.getAvailableBooks(bookIdList);
         if(availableBooks==null || availableBooks.size() != bookIdList.size()){
-            return new ResponseEntity("Few books in cart are not available. Available books are:"+paymentServiceImpl.getBooksJson(availableBooks),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(paymentServiceImpl.getBooksJson(availableBooks),HttpStatus.UNPROCESSABLE_ENTITY);
         }
         Orders orders;
         try {
