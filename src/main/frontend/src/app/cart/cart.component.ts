@@ -88,7 +88,7 @@ export class CartComponent implements OnInit {
       (data)=>{
         this.orderParentOrder=data;
         console.log(this.orderParentOrder)
-        this.notificationService.showWarning("Successfully Bought Books", "Success");
+        this.notificationService.showSuccess("Successfully Bought Books", "Success");
         this.getUserCartDetails();
         setTimeout(()=>this.spinnerService.hide(),2000);
     },(err)=>{

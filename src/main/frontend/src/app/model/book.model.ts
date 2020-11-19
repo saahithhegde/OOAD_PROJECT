@@ -9,6 +9,6 @@ export class BookDto{
    count:Number;
    description:string;
    image:string;
-
+   email:string
 
 }
