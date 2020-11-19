@@ -25,8 +25,6 @@ import java.util.List;
 @Transactional
 public class PaymentController {
 
-    @Autowired
-    CartServiceImpl cartServiceImpl;
 
     @Autowired
     PaymentServiceImpl paymentServiceImpl;

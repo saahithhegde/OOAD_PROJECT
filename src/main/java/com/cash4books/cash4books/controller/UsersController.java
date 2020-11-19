@@ -108,7 +108,7 @@ public class UsersController {
             return new ResponseEntity(sellerHistory,HttpStatus.OK);
         } catch (UserNotLoggedInException e) {
             return new ResponseEntity("User not logged in",HttpStatus.BAD_REQUEST);
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             return new ResponseEntity("Failed to get seller history",HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
