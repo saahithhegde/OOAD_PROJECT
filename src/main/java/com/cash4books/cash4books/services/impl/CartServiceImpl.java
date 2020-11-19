@@ -43,10 +43,12 @@ public class CartServiceImpl implements CartService {
             Users user=userService.getUserProfile(request,token);
             Book userOwnBook=bookService.getUserBook(book.getBookID(),user);
             if(userOwnBook!=null){
+                logger.error("Cannot Purchase Your Own Product");
                 throw new Exception("Cannot Purchase Your Own Product");
             }
             Cart cart = cartRepository.findCartByBookIDAndUsers(book.getBookID(),user);
             if(cart!=null){
+                logger.error("Already Added To Cart");
                 throw new Exception("Already Added To Cart");
             }
             Cart newCartItem=new Cart();
@@ -74,6 +76,7 @@ public class CartServiceImpl implements CartService {
             Users user=userService.getUserProfile(request,token);
             Cart cart=cartRepository.findCartByBookIDAndUsers(book.getBookID(), user);
             if(cart==null){
+                logger.error("Error Please Contact Administrator");
                 throw new Exception("Error Please Contact Administrator");
             }
             cartRepository.delete(cart);
@@ -99,6 +102,7 @@ public class CartServiceImpl implements CartService {
             return cartItemsWithBookDetails;
         }
         else{
+            logger.error("Failed to get cart details, user is not logged in");
             throw new UserNotLoggedInException();
         }
     }
@@ -121,10 +125,9 @@ public class CartServiceImpl implements CartService {
                 else{
                     cartRepository.delete(items);
             }
-            }
+        }
         userCart.setTotal(total);
         userCart.setCartDetails(cartItemsWithBookDetails);
-            return userCart;
+        return userCart;
     }
-
 }

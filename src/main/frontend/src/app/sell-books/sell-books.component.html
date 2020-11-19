@@ -105,9 +105,9 @@
                   <div class="img-wrap"> <img *ngIf="book.image "class="card-img-top" src="data:image/jpg;base64,{{book.image}}" alt="Card image cap"> </div>
                   <figcaption class="info-wrap border-top">
                     <a class="title">Title:{{book.title}}</a>
-                    <p class="title">Title:{{book.author}}</p>
-                    <p class="title">Title:{{book.bookID}}</p>
-                    <div class="price mt-2">${{book.price}}</div> <!-- price-wrap.// -->
+                    <p class="title">Author:{{book.author}}</p>
+                    <p class="title">Book ID:{{book.bookID}}</p>
+                    <div class="price mt-2">Book Price: ${{book.price}}</div> <!-- price-wrap.// -->
                     <button (click)="deleteBook(book)" class="btn btn-sm btn-outline-danger float-right">Delete Listing</button>
                   </figcaption>
                 </figure> <!-- card // -->

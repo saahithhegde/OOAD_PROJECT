@@ -262,7 +262,7 @@ public class UserServiceImplTest {
         Exception exception = assertThrows(Exception.class, () -> {
             userServiceImpl.forgotPassword(forgotPasswordDto);
         });
-        Assert.assertEquals("User Question and answers do not match",exception.getMessage());
+        Assert.assertEquals("User Question and Answer do not match",exception.getMessage());
 
     }
 
