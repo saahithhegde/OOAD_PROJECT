@@ -62,7 +62,8 @@ public class PaymentServiceImpl {
           }
           return bookIDList;
       } else {
-          throw new Exception("Cart is empty");
+          logger.error("User Cart is empty!");
+          throw new Exception("User Cart is empty!");
       }
   }
 
@@ -127,7 +128,10 @@ public class PaymentServiceImpl {
         bookRepository.deleteAll(books);
         cartRepository.deleteCartByUsers(buyer);
         }
-        else throw new Exception("Failed to execute transaction");
+        else {
+            logger.error("Failed to execute transaction");
+            throw new Exception("Failed to execute transaction");
+        }
         return orders;
     }
 
@@ -139,6 +143,7 @@ public class PaymentServiceImpl {
             return userPaymentTypes;
         }
         else{
+            logger.error("Failed to get user payment details, User not logged in");
             throw new UserNotLoggedInException();
         }
     }
@@ -151,13 +156,17 @@ public class PaymentServiceImpl {
             UserPaymentTypes userPaymentTypes1=userPayementRepository.findUserPaymentTypesByCardNumber(userPaymentTypes.getCardNumber());
             if(userPaymentTypes1==null){
                 userPayementRepository.save(userPaymentTypes);
+                logger.info("Successfully Added new User Payment Detail");
+
             }
             else {
+                logger.error("Failed to add new card, Card Number Already Present");
                 throw new Exception("Card Number Already Present");
             }
             return userPaymentTypes;
         }
         else{
+            logger.error("Failed to add new card, User not logged in");
             throw new UserNotLoggedInException();
         }
     }
@@ -168,9 +177,11 @@ public class PaymentServiceImpl {
             Users user=userService.getUserProfile(request,token);
             userPaymentTypes.setUsers(user);
             userPayementRepository.delete(userPaymentTypes);
+            logger.info("Successfully deleted User Payment Detail");
             return userPaymentTypes;
         }
         else{
+            logger.error("Failed to delete user payment details, User not logged in");
             throw new UserNotLoggedInException();
         }
     }

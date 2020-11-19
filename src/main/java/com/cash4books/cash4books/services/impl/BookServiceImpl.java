@@ -49,12 +49,15 @@ Logger logger = LoggerFactory.getLogger(BookDetailsController.class);
     public Book addBook(Book book, HttpServletRequest request, String token ) throws Exception {
         //TODO custom exception
         String email = sessionService.getSessionValidation(request,token);
-        if(email==null ||  email.equals(""))
-                throw new Exception("User not logged in");
-            Users user =  userRepository.findUserByEmail(email);
-            book.setUsers(user);
-            book = bookRepository.save(book);
-            return book;
+        if(email==null ||  email.equals("")) {
+            logger.error("Failed to add new book, User not logged in");
+            throw new UserNotLoggedInException();
+        }
+        Users user =  userRepository.findUserByEmail(email);
+        book.setUsers(user);
+        book = bookRepository.save(book);
+        logger.info("Added new book successfully");
+        return book;
 
     }
 
@@ -104,8 +107,10 @@ Logger logger = LoggerFactory.getLogger(BookDetailsController.class);
 
     public List<Book> getBooksOfSeller(HttpServletRequest request, String token ) throws Exception {
         String email = sessionService.getSessionValidation(request,token);
-        if(email==null ||  email.equals(""))
+        if(email==null ||  email.equals("")) {
+            logger.error("User not logged in");
             throw new UserNotLoggedInException();
+        }
         Users user = userRepository.findUserByEmail(email);
         List<Book> books = bookRepository.findAllByUsers(user);
         return books;
@@ -117,8 +122,10 @@ Logger logger = LoggerFactory.getLogger(BookDetailsController.class);
 
     public List<BooksOrderDto> getSellHistory(HttpServletRequest request, String token) throws UserNotLoggedInException, UnsupportedEncodingException {
         String email = sessionService.getSessionValidation(request,token);
-        if(email==null ||  email.equals(""))
+        if(email==null ||  email.equals("")) {
+            logger.error("Failed to get Sales History, User not logged in");
             throw new UserNotLoggedInException();
+        }
         List<BooksOrderDto> sellerHistory = new ArrayList<>();
         List<Integer> orderIDList = orderDetailsRepository.findAllOrdersOfSeller(email);
         if(orderIDList!=null && orderIDList.size()>0){
@@ -138,8 +145,10 @@ Logger logger = LoggerFactory.getLogger(BookDetailsController.class);
 
     public List<BooksOrderDto> getBuyHistory(HttpServletRequest request, String token) throws UnsupportedEncodingException, UserNotLoggedInException {
         String email = sessionService.getSessionValidation(request,token);
-        if(email==null ||  email.equals(""))
+        if(email==null ||  email.equals("")) {
+            logger.error("Failed to get Order History, User not logged in");
             throw new UserNotLoggedInException();
+        }
         List<BooksOrderDto> buyerHistory = new ArrayList<>();
         List<Orders> ordersList = orderRepository.findAllByBuyerID(email);
         for(Orders orders: ordersList){
@@ -156,6 +165,7 @@ Logger logger = LoggerFactory.getLogger(BookDetailsController.class);
         String email = sessionService.getSessionValidation(request,token);
         Integer bookId = book.getBookID();
         if(email==null ||  email.equals("")) {
+            logger.error("Failed to delete listing, User not logged in");
             throw new UserNotLoggedInException();
         }
         Book deletedBook = bookRepository.findByBookID(bookId);
