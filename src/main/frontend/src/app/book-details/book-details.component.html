@@ -1,19 +1,15 @@
 <div class="container">
   <div class="row">
     <div class="col-sm">
-      <div class="card" style="width: 18rem;">
-        <img *ngIf="bookArray[0]?.image "class="card-img-top" src="data:image/jpg;base64,{{bookArray[0].image}}" alt="Card image cap">
+      <div class="card" style="width: 18rem;height: 35rem">
+        <img style="height: 50%;width: 100%" *ngIf="bookArray[0]?.image "class="card-img-top" src="data:image/jpg;base64,{{bookArray[0].image}}" alt="Card image cap">
         <div class="card-body">
-          <h5 class="card-title">{{bookArray[0].title}}</h5>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">{{bookArray[0].author}}</li>
-          <li class="list-group-item">{{bookArray[0].category}}</li>
-          <li class="list-group-item">{{bookArray[0].isbn}}</li>
-        </ul>
-        <div class="card-body">
-          <a href="#" class="card-link">Card link</a>
-          <a href="#" class="card-link">Another link</a>
+          <h6 class="card-title">{{bookArray[0].title}}</h6>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Title: {{bookArray[0].author}}</li>
+            <li class="list-group-item">Category: {{bookArray[0].category}}</li>
+            <li class="list-group-item">Isbn: {{bookArray[0].isbn}}</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -27,19 +23,20 @@
                   <a href="#" class="img-wrap"><img *ngIf="book?.image"class="card-img-top" src="data:image/jpg;base64,{{book.image}}" alt="Card image cap"></a>
                 </aside> <!-- col.// -->
                 <div class="col-sm-8">
-                  <a href="#" class="title mt-2 h5">{{book.title}}</a>
+                  <a href="#" class="title mt-2 h5">Title: {{book.title}}</a>
                   <div class="d-flex mb-3">
                     <div class="price-wrap mr-4">
-                      <span class="price h5">{{book.price}}</span>
+                      <span class="price h5">Price: ${{book.price}}</span>
                     </div> <!-- price-dewrap // -->
                   </div>
 
                   <ul class="list-bullet">
-                    <li>{{book.isbn}}</li>
-                    <li>{{book.category}}</li>
-                    <li>{{book.author}}</li>
-                    <li>{{book.description}}</li>
+                    <li>Isbn: {{book.isbn}}</li>
+                    <li>Category: {{book.category}}</li>
+                    <li>Author: {{book.author}}</li>
+                    <li>Seller: {{book.email}}</li>
                   </ul>
+                  <small class="text-muted">Description: {{book.description}}</small>
 
                   <div class="form-row"><!-- col.// -->
                     <div class="form-group col-md">

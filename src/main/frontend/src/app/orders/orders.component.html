@@ -1,76 +1,62 @@
 
 <div class="card">
-  <div class="card-body">
-    <div class="container">
-      <div class="row justify-content-between">
-        <div class="col-6 overflow-auto" style="height: 600px;">
-          <table class="table">
-            <thead class="thead-dark">
+  <div class="container">
+    <div class="row">
+      <div class="col-6 overflow-auto" style="height: 600px;">
+        <h4>My orders</h4>
+        <table class="table">
+          <thead class="thead-dark">
               <tr>
                 <th *ngFor="let head of orderHeadElements">{{head}}</th>
               </tr>
             </thead>
-            <tbody>
-              <div *ngIf="orderParentOrder.length>0">
-                <tr  *ngFor="let or of orderParentOrder" id="{{or.orders.orderID}}">
+            <tbody *ngIf="orderParentOrder.length>0">
+                <tr *ngFor="let or of orderParentOrder" id="{{or.orders.orderID}}">
                   <td>{{or.orders.orderID}}</td>
                   <td>{{or.orders.orderDate}}</td>
                   <td>{{or.orders.paymentType}}</td>
                   <td>${{or.orders.total}}</td>
                   <td>
-                    <tr *ngFor="let ord of or.orderDetails">
-                      <a class="title">{{ord?.title}}</a>
-                      <p class="title">{{ord?.author}}</p>
-                      <p class="title">{{ord?.isbn}}</p>
-                      <p class="title">{{ord?.category}}</p>
-                      <p class="title">{{ord?.bookID}}</p>
-                      <div class="price mt-2">${{ord?.price}}</div>
-                      <p class="title">{{ord?.seller}}</p>
-                      <a href="#" class="img-wrap"><img *ngIf="ord?.image"class="card-img-top" src="data:image/jpg;base64,{{ord.image}}" alt="Card image cap"></a>
-                     </tr>
+                  <table>
+                      <tr *ngFor="let ord of or.orderDetails">
+                        <a class="title">Title: {{ord?.title}}</a>
+                        <p class="title">Author: {{ord?.author}}</p>
+                        <p class="title"><small class="text-muted">ISBN: {{ord?.isbn}}</small></p>
+                        <p class="title"><small class="text-muted">Category: {{ord?.category}}</small></p>
+                        <p class="title"><small class="text-muted">Price: ${{ord?.price}}</small></p>
+                        <p class="title"><small class="text-muted">Seller: {{ord?.seller}}</small></p>
+                        <a class="img-wrap"><img *ngIf="ord?.image"class="card-img-top" src="data:image/jpg;base64,{{ord.image}}" alt="Card image cap"></a>
+                        <hr>
+                       </tr>
+                  </table>
                   </td>
-                <td><button class="btn btn-success" (click)="generateInvoice(or.orders.orderID)">Get Invoice</button></td>
+                <td><button class="btn btn-sm btn-success" (click)="generateInvoice(or.orders.orderID)">Invoice</button></td>
                 </tr>
-              </div>
             </tbody>
           </table>
         </div>
         <div class="col-6 overflow-auto" style="height: 600px;">
-          <table class="table" style="table-layout: fixed!important;">
+          <h4>My Sales</h4>
+          <table class="table">
             <thead class="thead-dark">
               <tr>
-                <th *ngFor="let head of salesHeadElements" scope="col">{{head}} </th>
+                <th *ngFor="let head of salesHeadElements">{{head}} </th>
               </tr>
             </thead>
-            <tbody>
-              <div *ngIf="orderParentSales.length>0">
-                <div  *ngFor="let or of orderParentSales">
+            <tbody *ngFor="let or of orderParentSales">
+
                   <tr *ngFor="let ord of or.orderDetails">
                     <td>{{ord?.isbn}}</td>
                     <td>{{or.orders.orderDate}}</td>
                     <td>{{ord?.buyer}}</td>
                     <td>{{or.orders.paymentType}}</td>
                     <td>${{or.orders.total}}</td>
-                  <!-- <td *ngFor="let ord of or.orderDetails">
-                    <tr>
-                      <a class="title">{{ord.orderDetails?.title}}</a>
-                      <p class="title">{{ord.orderDetails?.author}}</p>
-                      <p class="title">{{ord.orderDetails?.isbn}}</p>
-                      <p class="title">{{ord.orderDetails?.category}}</p>
-                      <p class="title">{{ord.orderDetails?.bookID}}</p>
-                      <div class="price mt-2">${{ord.orderDetails?.price}}</div>
-                      <p class="title">{{ord.orderDetails?.seller}}</p>
-                    </tr>
-                    </td> -->
                   </tr>
-                </div>
-              </div>
             </tbody>
           </table>
         </div>
       </div>
     </div>
-  </div>
 </div>
 
 

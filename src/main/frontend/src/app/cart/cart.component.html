@@ -2,45 +2,44 @@
 	<aside class="col-lg-9">
     <div class="card">
 
-    <div class="table-responsive">
-
-    <table class="table table-borderless table-shopping-cart">
-    <thead class="text-muted">
-    <tr class="small text-uppercase">
-      <th scope="col">Book Details:</th>
-      <th scope="col">Price:</th>
-      <th scope="col">Action:</th>
-    </tr>
-    </thead>
-    <tbody>
-    <div *ngIf="cartArray?.cartDetails">
-      <div *ngFor="let items of cartArray.cartDetails">
-          <tr>
-            <td scope="col">
-              <figure class="itemside align-items-center">
-                <div class="aside"><img *ngIf="items.bookDetails.image "class="card-img-top" src="data:image/jpg;base64,{{items.bookDetails.image}}" alt="Card image cap"></div>
-                <figcaption class="info">
-                  <p  class="title text-dark">{{items.bookDetails.title}}</p>
-                  <br>
-                  <p  class="title text-dark">{{items.bookDetails.author}}</p>
-                  <br>
-                  <p  class="title text-dark">{{items.bookDetails.category}}</p>
-                </figcaption>
-              </figure>
-            </td>
-            <td scope="col">
-              <div class="price-wrap">
-                <var class="price">{{items.bookDetails.price}}</var>
-              </div> <!-- price-wrap .// -->
-            </td>
-            <td scope="col">
-            <a (click)="removeFromCart(items.bookDetails)" class="btn btn-light">Remove</a>
-            </td>
-          </tr>
-        </div>
-    </div>
-    </tbody>
-    </table>
+    <div class="table-responsive-sm">
+      <table class="table table-striped">
+        <thead class="thead-light">
+        <tr class="small text-uppercase">
+          <th scope="col">Book Details:</th>
+          <th scope="col">Price:</th>
+          <th scope="col">Seller:</th>
+          <th scope="col">Action:</th>
+        </tr>
+        </thead>
+        <tbody *ngIf="cartArray?.cartDetails">
+        <tr *ngFor="let items of cartArray.cartDetails">
+          <td style="width: 2000px">
+            <figure class="itemside align-items-center">
+              <div class="aside"><img style="width: 150px;height: 200px" *ngIf="items.bookDetails.image "class="card-img-top" src="data:image/jpg;base64,{{items.bookDetails.image}}" alt="Card image cap"></div>
+              <figcaption class="info">
+                <p  class="title">Title: {{items.bookDetails.title}}</p>
+                <p  class="title">Author: {{items.bookDetails.author}}</p>
+                <p  class="title">Category:{{items.bookDetails.category}}</p>
+              </figcaption>
+            </figure>
+          </td>
+          <td>
+            <div class="price-wrap">
+              <var class="price">${{items.bookDetails.price}}</var>
+            </div> <!-- price-wrap .// -->
+          </td>
+          <td>
+            <div class="price-wrap">
+              <var class="price">{{items.bookDetails.email}}</var>
+            </div> <!-- price-wrap .// -->
+          </td>
+          <td >
+            <a (click)="removeFromCart(items.bookDetails)" class="btn btn-warning">Remove</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
 
     </div> <!-- table-responsive.// -->
     </div> <!-- card.// -->
@@ -56,56 +55,15 @@
 		</dl>
 		<hr>
   <div *ngIf="cartArray.total>0">
-  <label>Select Payment Type</label><br>
+  <label>Select Card Number</label><br>
     <select class="form-control" placeholder="Select Payment Type" [(ngModel)]="paymentType" ngModel required name="type" #type="ngModel">
       <option *ngFor="let paymentDetails of userPaymentDetailsArray" [value]="paymentDetails.paymentType" >{{paymentDetails.cardNumber}}</option>
     </select>
-		<button *ngIf="paymentType" (click)="checkout()" class="btn btn-dark btn-block">Check Out</button>
+		<button *ngIf="paymentType" (click)="checkout()" class="btn btn-success btn-block">Check Out</button>
   </div>
 </div> <!-- card-body.// -->
 </div> <!-- card.// -->
 	</aside> <!-- col.// -->
 </div> <!-- row.// -->
 
-<div class="row">
-  <aside class="col-lg-9">
-    <div class="card">
-      <div class="table-responsive">
-        <div *ngIf="orderParentOrder?.orderDetails?.length>0">
-        <table class="table" id="contentToConvert">
-          <thead class="thead-dark">
-          <tr>
-            <th>Order ID</th>
-            <th>Order Date</th>
-            <th>Payment Types</th>
-            <th>Total</th>
-          </tr>
-          </thead>
-          <tbody>
-              <tr>
-                <td>{{orderParentOrder.orders.orderID}}</td>
-                <td>{{orderParentOrder.orders.orderDate}}</td>
-                <td>{{orderParentOrder.orders.paymentType}}</td>
-                <td>${{orderParentOrder.orders.total}}</td>
-                <td>
-                    <tr *ngFor="let ord of orderParentOrder.orderDetails">
-                      <a class="title">{{ord?.title}}</a>
-                      <p class="title">{{ord?.author}}</p>
-                      <p class="title">{{ord?.isbn}}</p>
-                      <p class="title">{{ord?.category}}</p>
-                      <p class="title">{{ord?.bookID}}</p>
-                      <div class="price mt-2">${{ord?.price}}</div>
-                      <p class="title">{{ord?.seller}}</p>
-                      <a href="#" class="img-wrap"><img *ngIf="ord?.image"class="card-img-top" src="data:image/jpg;base64,{{ord.image}}" alt="Card image cap"></a>
-                    </tr>
-                </td>
-              </tr>
-          </tbody>
-        </table>
-          <button (click)="generatepdf()" class="btn btn-dark btn-block">Get Invoice</button>
-      </div>
-      </div>
-    </div>
-  </aside>
-</div>
 

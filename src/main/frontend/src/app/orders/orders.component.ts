@@ -18,7 +18,7 @@ export class OrdersComponent implements OnInit {
 
   constructor(private pdfservice:PdfService,private spinnerService: Ng4LoadingSpinnerService,private notificationService:NotificationService, private orderServiceService: OrderServiceService) { }
 
-  orderHeadElements = ['OrderID', 'Order Date', 'Payment Type', 'Total Cost', 'Order Details'];
+  orderHeadElements = ['OrderID', 'Order Date', 'Payment Type', 'Total Cost', 'Order Details','Invoice'];
   salesHeadElements = ['Book ISBN', 'Sale Date', 'Buyer', 'Payment Type', 'Total Price'];
 
   ngOnInit() {

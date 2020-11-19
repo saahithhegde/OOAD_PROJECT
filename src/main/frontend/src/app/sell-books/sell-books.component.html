@@ -66,7 +66,7 @@
                     </div>
                   </div>
 
-                  <div class="form-group col-md-8">
+                  <div class="form-group col-md-4">
                     <label >Book Description/Condition</label>
                     <textarea class="form-control"  placeholder="Enter the book description" name="description" [(ngModel)]="addBookDto.description" required #description="ngModel">
                     <div [hidden]="description.valid" class="alert alert-danger">
@@ -102,13 +102,13 @@
             <div *ngFor="let book of userBooksArray" class="row">
               <div class="h-75 container" style="overflow: auto;">
                 <figure class="card card-product-grid">
-                  <div class="img-wrap"> <img *ngIf="book.image "class="card-img-top" src="data:image/jpg;base64,{{book.image}}" alt="Card image cap"> </div>
+                  <div class="img-wrap"> <img *ngIf="book.image " style="height: 200px;width: 150px" class="card-img-top" src="data:image/jpg;base64,{{book.image}}" alt="Card image cap"> </div>
                   <figcaption class="info-wrap border-top">
                     <a class="title">Title:{{book.title}}</a>
                     <p class="title">Author:{{book.author}}</p>
-                    <p class="title">Book ID:{{book.bookID}}</p>
-                    <div class="price mt-2">Book Price: ${{book.price}}</div> <!-- price-wrap.// -->
-                    <button (click)="deleteBook(book)" class="btn btn-sm btn-outline-danger float-right">Delete Listing</button>
+                    <p class="title"><small class="text-muted">Description: {{book.description}}</small></p>
+                    <div class="price mt-2">Price:  ${{book.price}}</div> <!-- price-wrap.// -->
+                    <button (click)="deleteBook(book)" class="btn btn-sm btn-danger float-right">Delete Listing</button>
                   </figcaption>
                 </figure> <!-- card // -->
               </div> <!-- col.// -->
