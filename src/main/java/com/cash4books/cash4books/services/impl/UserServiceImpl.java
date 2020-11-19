@@ -32,16 +32,16 @@ public class UserServiceImpl implements UserService {
             if(userRepository.findUserByEmail(newUserDetails.getEmail())==null){
                 if(newUserDetails.getEmail()!=null && newUserDetails.getPassword()!=null && newUserDetails.getQuestion()!=null && newUserDetails.getAnswer()!=null ) {
                     userRepository.save(newUserDetails);
-                    logger.info("saved new user");
+                    logger.info("Saved new user");
                     return newUserDetails;
                 }
                 else{
-                    logger.error("required field not present");
+                    logger.error("Required field not present");
                     throw new Exception("Basic details not present");
                 }
             }
             else {
-                logger.error("user already present");
+                logger.error("User already present");
                 throw new Exception("User already present");
             }
     }
@@ -54,15 +54,15 @@ public class UserServiceImpl implements UserService {
             if (existingUserDetails != null) {
                 existingUserDetails = newUserDetails;
                 userRepository.save(existingUserDetails);
-                logger.info("updated user");
+                logger.info("Updated user profile details");
                 return existingUserDetails;
             } else {
-                logger.error("user not found");
+                logger.error("User not found");
                 throw new UserNotFoundException();
             }
         }
         else{
-            logger.error("user not logged in");
+            logger.error("User not logged in");
             throw new UserNotLoggedInException();
         }
     }
@@ -73,16 +73,16 @@ public class UserServiceImpl implements UserService {
             if(email!=null) {
                 Users getUserProfile = userRepository.findUserByEmail(email);
                 if (getUserProfile != null) {
-                    logger.info("retrieved user successfully");
+                    logger.info("Retrieved user successfully");
                     return getUserProfile;
                 }
                 else {
-                    logger.error("user not found");
+                    logger.error("User not found");
                     throw new UserNotFoundException();
                 }
             }
             else{
-                logger.error("user not logged in");
+                logger.error("User not logged in");
                 throw new UserNotLoggedInException();
             }
     }
@@ -92,21 +92,21 @@ public class UserServiceImpl implements UserService {
             Users userDetails = userRepository.findUserByEmail(usersLoginDto.getEmail());
             if (userDetails != null) {
                 if (userDetails.getPassword().equals(usersLoginDto.getPassword())) {
-                    logger.info("created new session and authenticated user");
+                    logger.info("Created new session and Authenticated the user");
                     return sessionService.createSession(usersLoginDto, request);
                 } else {
-                    logger.error("password wrong");
+                    logger.error("Wrong Password");
                     throw new Exception("Password Error");
                 }
             } else {
-                logger.error("user not found");
+                logger.error("User not found");
                 throw new UserNotFoundException();
             }
     }
 
     @Override
     public void logoutUser(HttpServletRequest request){
-        logger.info("logged out");
+        logger.info("User logged out");
         sessionService.destroySession(request);
     }
 
@@ -117,14 +117,15 @@ public class UserServiceImpl implements UserService {
             if(userDetails.getQuestion().equals(forgotPasswordDto.getQuestion()) && userDetails.getAnswer().equals(forgotPasswordDto.getAnswer())){
                 userDetails.setPassword(forgotPasswordDto.getPassword());
                 userRepository.save(userDetails);
-                logger.info("new password set");
                 userDetails.setPassword("");
                 userDetails.setQuestion("");
                 userDetails.setAnswer("");
+                logger.info("New password updated");
                 return userDetails;
             }
             else{
-                throw new Exception("User Question and answers do not match");
+                logger.error("User Question and Answer do not match");
+                throw new Exception("User Question and Answer do not match");
             }
         }
         else {
