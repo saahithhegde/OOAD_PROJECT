@@ -1,7 +1,6 @@
 package com.cash4books.cash4books.repository;
 
 import com.cash4books.cash4books.entity.OrderDetails;
-import com.cash4books.cash4books.entity.Orders;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
